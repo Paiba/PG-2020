@@ -8,8 +8,11 @@ Codigo do painel de controle feito com a finalidade de projeto de graduacao pela
 import pandas as pd
 import tkinter as tk
 import bokeh as bk
+import matplotlib as mpl
+
 from tkinter import filedialog
 # from bokeh import figure, output_file, show
+
 
 # Leitura bruta do arquivo CSV
 root = tk.Tk()
@@ -28,13 +31,17 @@ disciplinas = tabela_bruta.groupby(colunas_repetidas).COD_DISCIPLINA.count().to_
 
 #coluna com a média não ponderada das notas do aluno
 media_final = tabela_bruta.groupby(colunas_repetidas).MEDIA_FINAL.mean().to_frame().reset_index()
+media_final = media_final['MEDIA_FINAL'] # gambiarra...
 
 #junção das informações
 tabela_refinada = pd.concat([media_final, disciplinas], axis=1, sort=False)
 
 print(tabela_refinada);
 
+#### SITUACÃO DOS ALUNOS ######
 
+forma_evasao = tabela_refinada['FORMA_EVASAO']
+print(forma_evasao.value_counts())
 
 
 

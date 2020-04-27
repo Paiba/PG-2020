@@ -24,15 +24,17 @@ tabela_bruta = pd.read_csv(file_path)
 colunas_repetidas = ['ID_CURSO_ALUNO','COD_CURSO','NOME_CURSO','ANO_INGRESSO','FORMA_INGRESSO','FORMA_EVASAO','PERIODO_ALUNO','TIPO_INSTUICAO_SEGUNDO_GRAU','NACIONALIADE','NATURALIDADE','UF_NATURALIDADE','COTISTA','PLANO_ESTUDO']
 
 #coluna com a quantidade de disciplinas que o aluno fez
-disciplinas = tabela_bruta.groupby(colunas_repetidas).COD_DISCIPLINA.count().to_frame()
+disciplinas = tabela_bruta.groupby(colunas_repetidas).COD_DISCIPLINA.count().to_frame().reset_index()
 
 #coluna com a média não ponderada das notas do aluno
-media_final = tabela_bruta.groupby(colunas_repetidas).MEDIA_FINAL.mean().to_frame()
+media_final = tabela_bruta.groupby(colunas_repetidas).MEDIA_FINAL.mean().to_frame().reset_index()
 
 #junção das informações
 tabela_refinada = pd.concat([media_final, disciplinas], axis=1, sort=False)
 
 print(tabela_refinada);
+
+
 
 
 

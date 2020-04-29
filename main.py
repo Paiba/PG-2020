@@ -36,12 +36,21 @@ media_final = media_final['MEDIA_FINAL'] # gambiarra...
 #junção das informações
 tabela_refinada = pd.concat([media_final, disciplinas], axis=1, sort=False)
 
-print(tabela_refinada);
 
 #### SITUACÃO DOS ALUNOS ######
 
+nome_evasao = ['Desistência','Desligamento: Resolução 68/2017-CEPE','Desligamento por Abandono','Desligamento: Descumpriu Plano de Estudos','Reopção de curso','Adaptação Curricular','Transferido','Desligamento: 3 reprovações em 1 disciplina']
 forma_evasao = tabela_refinada['FORMA_EVASAO']
-print(forma_evasao.value_counts())
+
+situacao = forma_evasao.value_counts();
+
+situacao
+
+a = tabela_refinada['FORMA_EVASAO'].replace(nome_evasao, 'Evadiu')
+a.hist()
+a.value_counts()
+
+tabela_refinada.groupby('FORMA_EVASAO').describe() #serve para algumas análises numéricas
 
 
 

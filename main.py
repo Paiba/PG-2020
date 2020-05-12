@@ -11,7 +11,10 @@ import bokeh as bk
 import matplotlib as mpl
 
 from tkinter import filedialog
-# from bokeh import figure, output_file, show
+from bokeh.plotting import figure, output_file, show
+from bokeh.io import output_file, show
+from bokeh.models import ColumnDataSource, Grid, HBar, LinearAxis, Plot, HoverTool, Panel, Tabs
+from bokeh.layouts import layout
 
 
 # Leitura bruta do arquivo CSV
@@ -37,7 +40,7 @@ media_final = media_final['MEDIA_FINAL'] # gambiarra...
 tabela_refinada = pd.concat([media_final, disciplinas], axis=1, sort=False)
 
 
-#### SITUACÃO DOS ALUNOS ######
+## SITUACÃO DOS AColumnDataSource, HoverToolLUNOS ##
 
 nome_evasao = ['Desistência','Desligamento: Resolução 68/2017-CEPE','Desligamento por Abandono','Desligamento: Descumpriu Plano de Estudos','Reopção de curso','Adaptação Curricular','Transferido','Desligamento: 3 reprovações em 1 disciplina']
 forma_evasao = tabela_refinada['FORMA_EVASAO']
@@ -47,10 +50,31 @@ situacao = forma_evasao.value_counts();
 situacao
 
 a = tabela_refinada['FORMA_EVASAO'].replace(nome_evasao, 'Evadiu')
-a.hist()
-a.value_counts()
+adf = a.value_counts().to_frame()
 
 tabela_refinada.groupby('FORMA_EVASAO').describe() #serve para algumas análises numéricas
 
+###########
 
 
+##### html ######
+
+output_file('index.html')
+
+p1 = figure()
+p1.circle([1, 2, 3, 4, 5], [6, 7, 2, 4, 5])
+
+
+p2 = figure()
+p2.line([1, 2, 3, 4, 5], [6, 7, 2, 4, 5])
+
+
+l1 = layout(p1, sizing_mode='fixed')
+l2 = layout(p2)
+
+tab1 = Panel(child=p1, title="Tema 1")
+tab2 = Panel(child=p2, title="Tema 2")
+
+tabs = Tabs(tabs=[ tab1, tab2 ])
+
+show(tabs)

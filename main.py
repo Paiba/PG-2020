@@ -31,28 +31,46 @@ def Main():
         
         file_path = filedialog.askopenfilename()
         
-        tabela_bruta = pd.read_csv(file_path)
-        # Gráficos e Tabelas Úteis
+        tabela = pd.read_csv(file_path)
         
-        #variável com todas as colunas que se repetem no dado bruto (Faltam as últimas 6 que deram problemas de inconsistencias)
+        tabela_bruta = tabela
+
+        #ADIÇÃO DE COLUNAS RELEVANTES
+        
+        porcent_faltas = (tabela_bruta['NUM_FALTAS']/tabela_bruta['CH_DISCIPLINA'] )*100 #Faltas dividido pelo número de aulas
+        tabela_bruta['PORCENTAGEM_FALTAS'] = porcent_faltas #Coluna com porcentagem de faltas do aluno em cada disciplina
+
+        #Variável com todas as colunas que se repetem no dado bruto (Faltam as últimas 6 que deram problemas de inconsistencias)
         colunas_repetidas = ['ID_CURSO_ALUNO','COD_CURSO','NOME_CURSO','ANO_INGRESSO','FORMA_INGRESSO','FORMA_EVASAO','PERIODO_ALUNO','TIPO_INSTUICAO_SEGUNDO_GRAU','NACIONALIADE','NATURALIDADE','UF_NATURALIDADE','COTISTA','PLANO_ESTUDO']
+         
+        #Coluna da média das porcentagens que o aluno faltou
+        faltas = tabela_bruta.groupby(colunas_repetidas).PORCENTAGEM_FALTAS.mean().to_frame().reset_index()['PORCENTAGEM_FALTAS']
         
-        #coluna com a quantidade de disciplinas que o aluno fez
+        #Coluna com a quantidade de disciplinas que o aluno fez(Desconsiderarados quando Matrícula, trancamento de curso e casos especiais)!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
         disciplinas = tabela_bruta.groupby(colunas_repetidas).COD_DISCIPLINA.count().to_frame().reset_index()
         
-        #coluna com a média não ponderada das notas do aluno
-        media_final = tabela_bruta.groupby(colunas_repetidas).MEDIA_FINAL.mean().to_frame().reset_index()
-        media_final = media_final['MEDIA_FINAL'] # gambiarra...
-
-        #coluna com a quantidade de vezes que o aluno reprovou por falta
-
-        #rep_falta = tabela_bruta.groupby(['ID_CURSO_ALUNO','SITUACAO_DISCIPLINA']).MEDIA_FINAL.count().to_frame().reset_index()
-        #print(rep_falta)
-        #coluna com a quantidade de vezes que o aluno reprovou por frequencia
+        #Coluna com a média não ponderada das notas do aluno(Corrigir)!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        media_final = tabela_bruta.groupby(colunas_repetidas).MEDIA_FINAL.mean().to_frame().reset_index()['MEDIA_FINAL']
         
+        #Coluna com a quantidade de vezes que o aluno reprovou por falta
+
+        rep_falta = tabela_bruta.filter(['ID_CURSO_ALUNO','SITUACAO_DISCIPLINA','MEDIA_FINAL'])
+        rep_falta.rename(columns={'SITUACAO_DISCIPLINA':'NUM_REP_FALTA'}, inplace=True)
+        rep_falta['NUM_REP_FALTA'] = rep_falta['NUM_REP_FALTA'].map({'Reprovado por Freqüência': 1})
+        rep_falta = rep_falta.groupby(['ID_CURSO_ALUNO']).NUM_REP_FALTA.sum().to_frame().reset_index()['NUM_REP_FALTA']
+
+        #Coluna com a quantidade de vezes que o aluno reprovou por nota
+
+        rep_nota = tabela_bruta.filter(['ID_CURSO_ALUNO','SITUACAO_DISCIPLINA','MEDIA_FINAL'])
+        rep_nota.rename(columns={'SITUACAO_DISCIPLINA':'NUM_REP_NOTA'}, inplace=True)
+        rep_nota['NUM_REP_NOTA'] = rep_nota['NUM_REP_NOTA'].map({'Reprovado por Nota': 1})
+        rep_nota = rep_nota.groupby(['ID_CURSO_ALUNO']).NUM_REP_NOTA.sum().to_frame().reset_index()['NUM_REP_NOTA']
+
         #junção das informações
-        tabela_refinada = pd.concat([media_final, disciplinas], axis=1, sort=False) #Tabela de cada aluno e as informações das colunas repetidas + média das notas e número de matérias cursadas
-        
+        tabela_refinada = pd.concat([disciplinas,media_final,faltas,rep_falta, rep_nota], axis=1, sort=False) 
+        tabela_refinada.rename(columns={'COD_DISCIPLINA':'NUM_DISCIPLINA'}, inplace=True)
+        tabela_refinada['NUM_DISCIPLINA']=tabela_bruta.groupby(colunas_repetidas).MEDIA_FINAL.count().to_frame().reset_index()['MEDIA_FINAL'] #Disciplinas feitas só são contadas quando uma média final é atribuída
+        print(tabela_refinada)
         
         ## SITUACÃO DOS ALUNOS ##
         

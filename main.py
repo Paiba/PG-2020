@@ -60,18 +60,23 @@ def Main():
         media_final = tabela_bruta.groupby(colunas_repetidas).MEDIA_FINAL.mean().to_frame().reset_index()['MEDIA_FINAL']
         
         #Coluna com a média ponderada das notas
+
         peso_notas = tabela_bruta.groupby(['ID_CURSO_ALUNO','MEDIA_FINAL']).CREDITOS.sum().to_frame().reset_index()
         peso_notas['MEDIA_FINAL'] = peso_notas['MEDIA_FINAL'] * peso_notas['CREDITOS']
         peso_notas = peso_notas.groupby(['ID_CURSO_ALUNO']).sum()
         peso_notas['MEDIA_PONDERADA'] = peso_notas['MEDIA_FINAL'] / peso_notas['CREDITOS']
         peso_notas = peso_notas['MEDIA_PONDERADA'].reset_index()
+
         #Adicionando as matrículas sem média ponderada atribuida
         for matricula in tabela_bruta['ID_CURSO_ALUNO'].unique():
                 if matricula not in peso_notas['ID_CURSO_ALUNO'].unique() :
                         nova_linha = {'ID_CURSO_ALUNO': matricula, 'MEDIA_PONDERADA':0}
-                        peso_notas = peso_notas.append(nova_linha, ignore_index=True).sort_values(by=['ID_CURSO_ALUNO'])
-
+                        peso_notas = peso_notas.append(nova_linha, ignore_index=True)
+        peso_notas = peso_notas.sort_values(by=['ID_CURSO_ALUNO']).reset_index().drop('index', axis=1)
+        peso_notas = peso_notas['MEDIA_PONDERADA']
         
+
+        ######ARRUMAR#############
         
                              
                                 
@@ -91,12 +96,11 @@ def Main():
 
         #Junção das informações
 
-        tabela_refinada = pd.concat([disciplinas,media_final,faltas,rep_falta, rep_nota], axis=1, sort=False) 
+        tabela_refinada = pd.concat([disciplinas,media_final,faltas,rep_falta, rep_nota, peso_notas], axis=1, sort=False) 
         tabela_refinada.rename(columns={'COD_DISCIPLINA':'NUM_DISCIPLINA'}, inplace=True)
         tabela_refinada['NUM_DISCIPLINA']=tabela_bruta.groupby(colunas_repetidas).MEDIA_FINAL.count().to_frame().reset_index()['MEDIA_FINAL'] 
         #Disciplinas feitas só são contadas quando uma média final é atribuída
 
-        
         
         ## SITUACÃO DOS ALUNOS ##
         

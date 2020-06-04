@@ -36,9 +36,9 @@ def Main():
         file_path = filedialog.askopenfilename()
         
         tabela = pd.read_csv(file_path)
-        
         tabela_bruta = tabela
-        
+        tabela_bruta = tabela_bruta.drop_duplicates(subset=tabela_bruta.columns[1:-7])# Ta dando um warning, tentar dropar as linhas com idaluno, codigo da disciplina e semestre
+
         #ADIÇÃO DE COLUNAS RELEVANTES
         
         porcent_faltas = (tabela_bruta['NUM_FALTAS']/tabela_bruta['CH_DISCIPLINA'] )*100 #Faltas dividido pelo número de aulas
@@ -112,7 +112,6 @@ def Main():
         nome_evasao = ['Desistência','Desligamento: Resolução 68/2017-CEPE','Desligamento por Abandono','Desligamento: Descumpriu Plano de Estudos','Reopção de curso','Adaptação Curricular','Transferido','Desligamento: 3 reprovações em 1 disciplina'] #Grupo de diferentes nomenclaturas de evasão
         
         tabela_simplifica_evad['FORMA_EVASAO'] = tabela_refinada['FORMA_EVASAO'].replace(nome_evasao, 'Evadiu') #Mudando diversas nomenclaturas de evasão para evadiu
-        
         
         ###########
 

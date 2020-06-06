@@ -37,9 +37,14 @@ def Main():
         
         tabela = pd.read_csv(file_path)
         tabela_bruta = tabela
-        tabela_bruta = tabela_bruta.drop_duplicates(subset=tabela_bruta.columns[1:-7])# Ta dando um warning, tentar dropar as linhas com idaluno, codigo da disciplina e semestre
+        enxuga = ['ID_CURSO_ALUNO', 'COD_DISCIPLINA', 'ANO_DISCIPLINA','SEMESTRE_DISCIPLINA']
+        tabela_bruta = tabela_bruta.drop_duplicates(subset=enxuga)# Ta dando um warning, tentar dropar as linhas com idaluno, codigo da disciplina e semestre
+        #dropar todas as linhas com matrícula(ESCREVER NA MONOGRAFIA)
+        tabela_bruta = tabela_bruta[tabela_bruta.SITUACAO_DISCIPLINA != 'Matrícula']
 
-        #ADIÇÃO DE COLUNAS RELEVANTES
+
+
+        #CONSTRUÇÃO DA TABELA DE ALUNOS
         
         porcent_faltas = (tabela_bruta['NUM_FALTAS']/tabela_bruta['CH_DISCIPLINA'] )*100 #Faltas dividido pelo número de aulas
         tabela_bruta['PORCENTAGEM_FALTAS'] = porcent_faltas #Coluna com porcentagem de faltas do aluno em cada disciplina
@@ -96,9 +101,9 @@ def Main():
 
         #Junção das informações
 
-        tabela_refinada = pd.concat([disciplinas,media_final,faltas,rep_falta, rep_nota, peso_notas], axis=1, sort=False) 
-        tabela_refinada.rename(columns={'COD_DISCIPLINA':'NUM_DISCIPLINA'}, inplace=True)
-        tabela_refinada['NUM_DISCIPLINA']=tabela_bruta.groupby(colunas_repetidas).MEDIA_FINAL.count().to_frame().reset_index()['MEDIA_FINAL'] 
+        tabela_refinada_aluno = pd.concat([disciplinas,media_final,faltas,rep_falta, rep_nota, peso_notas], axis=1, sort=False) 
+        tabela_refinada_aluno.rename(columns={'COD_DISCIPLINA':'NUM_DISCIPLINA'}, inplace=True)
+        tabela_refinada_aluno['NUM_DISCIPLINA']=tabela_bruta.groupby(colunas_repetidas).MEDIA_FINAL.count().to_frame().reset_index()['MEDIA_FINAL'] 
         #Disciplinas feitas só são contadas quando uma média final é atribuída
 
         
@@ -107,16 +112,16 @@ def Main():
         #########################################################################################################################################################
         ###  !!!!  MUITO ENGESSADO, CASO HAJA ALGUM OUTRO TIPO DE EVASÃO NÃO COLOCADO NOS DADOS INCIALMENTE PASSADOS PARA MIM ISSO DEVE SER ATUALIZADO  !!!!  ###
         ##########################################################################################################################################################
-        tabela_simplifica_evad = tabela_refinada
+        tabela_simplifica_aluno = tabela_refinada_aluno
 
         nome_evasao = ['Desistência','Desligamento: Resolução 68/2017-CEPE','Desligamento por Abandono','Desligamento: Descumpriu Plano de Estudos','Reopção de curso','Adaptação Curricular','Transferido','Desligamento: 3 reprovações em 1 disciplina'] #Grupo de diferentes nomenclaturas de evasão
         
-        tabela_simplifica_evad['FORMA_EVASAO'] = tabela_refinada['FORMA_EVASAO'].replace(nome_evasao, 'Evadiu') #Mudando diversas nomenclaturas de evasão para evadiu
+        tabela_simplifica_aluno['FORMA_EVASAO'] = tabela_refinada_aluno['FORMA_EVASAO'].replace(nome_evasao, 'Evadiu') #Mudando diversas nomenclaturas de evasão para evadiu
         
         ###########
 
 
-
+        #CONSTRUÇÃO DA TABELA DE DISCIPLINAS E CURSOS
 
 
         ##### html ######
@@ -124,8 +129,8 @@ def Main():
         output_file('index.html')
 
         ########### Classe de cada aba ####################
-        SITUACAO = Aba_geral(tabela_simplifica_evad)
-        ACADEMICO = Aba_academico(tabela_simplifica_evad)
+        SITUACAO = Aba_geral(tabela_simplifica_aluno)
+        ACADEMICO = Aba_academico(tabela_simplifica_aluno)
 
         ########### Layout de cada aba ####################
         aba_geral = SITUACAO.aba

@@ -12,6 +12,8 @@ from bokeh.models import ColumnDataSource, Grid, HBar, LinearAxis, Plot, HoverTo
 from bokeh.layouts import layout
 from bokeh.palettes import Paired12
 from bokeh.transform import factor_cmap
+from bokeh.transform import cumsum
+from math import pi
 ###
 class Aba_socio:
 

@@ -19,6 +19,8 @@ from bokeh.models import ColumnDataSource, Grid, HBar, LinearAxis, Plot, HoverTo
 from bokeh.layouts import layout
 from bokeh.palettes import Paired12
 from bokeh.transform import factor_cmap
+from bokeh.transform import cumsum
+from math import pi
 ###
 
 
@@ -38,7 +40,7 @@ def Main():
         tabela = pd.read_csv(file_path)
         tabela_bruta = tabela
         enxuga = ['ID_CURSO_ALUNO', 'COD_DISCIPLINA', 'ANO_DISCIPLINA','SEMESTRE_DISCIPLINA']
-        tabela_bruta = tabela_bruta.drop_duplicates(subset=enxuga)# Ta dando um warning, tentar dropar as linhas com idaluno, codigo da disciplina e semestre
+        tabela_bruta = tabela_bruta.drop_duplicates(subset=enxuga)
         #dropar todas as linhas com matrícula(ESCREVER NA MONOGRAFIA)
         tabela_bruta = tabela_bruta[tabela_bruta.SITUACAO_DISCIPLINA != 'Matrícula']
 

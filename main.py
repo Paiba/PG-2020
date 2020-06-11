@@ -45,7 +45,6 @@ def Main():
         tabela_bruta = tabela_bruta[tabela_bruta.SITUACAO_DISCIPLINA != 'Matrícula']
 
 
-
         #CONSTRUÇÃO DA TABELA DE ALUNOS
         
         porcent_faltas = (tabela_bruta['NUM_FALTAS']/tabela_bruta['CH_DISCIPLINA'] )*100 #Faltas dividido pelo número de aulas
@@ -84,7 +83,6 @@ def Main():
         
 
         ######ARRUMAR#############
-        
                              
                                 
         #Coluna com a quantidade de vezes que o aluno reprovou por falta
@@ -124,8 +122,8 @@ def Main():
 
 
         #CONSTRUÇÃO DA TABELA DE DISCIPLINAS E CURSOS
-
-
+        tabela_refinada_disciplinas = tabela_bruta.filter(['COD_CURSO','NOME_CURSO','COD_DISCIPLINA','NOME_DISCIPLINA','MEDIA_FINAL','SITUACAO_DISCIPLINA'])
+        print(tabela_refinada_disciplinas)
         ##### html ######
 
         output_file('index.html')
@@ -133,16 +131,19 @@ def Main():
         ########### Classe de cada aba ####################
         SITUACAO = Aba_geral(tabela_simplifica_aluno)
         ACADEMICO = Aba_academico(tabela_simplifica_aluno)
+        #GEOGRAFICA = Aba_geografica(tabela_simplifica_aluno)
 
         ########### Layout de cada aba ####################
         aba_geral = SITUACAO.aba
         aba_acad = ACADEMICO.aba
+        #aba_geog = GEOGRAFICA.aba
 
         ############  Abas #######################
         geral = Panel(child = aba_geral, title="Geral")
         academico = Panel(child = aba_acad, title="Rendimento Acadêmico")
-   
-        tabs = Tabs(tabs=[ academico , geral])
+        #geografico = Panel(child = aba_geog, title="Informações Geográficas")
+
+        tabs = Tabs(tabs=[geral, academico])
 
         show(tabs)
 

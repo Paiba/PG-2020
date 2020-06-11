@@ -78,8 +78,6 @@ class Aba_academico:
                 freq_falta.legend.location = "top_right"
 
 
-             
-
-
+                
 
                 self.aba = layout([[rep_falta,rep_nota],[rendimento,freq_falta]])

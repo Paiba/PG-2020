@@ -15,8 +15,9 @@ from bokeh.transform import factor_cmap
 from bokeh.transform import cumsum
 from math import pi
 ###
-class Aba_socio:
+class Aba_disciplina:
 
          def __init__(self, dados):
+                
 
                 self.aba = 0

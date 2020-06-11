@@ -28,14 +28,12 @@ class Aba_geral:
                 #Números gerais, Ranking da situação
 
                 data1_1 = alunos_por_ano.groupby('FORMA_EVASAO')
-                situ1 = figure(y_range = data1_1, plot_width=500, plot_height=300, title = "Situação dos alunos em 2018",
-										tooltips=[("Alunos", "@MEDIA_FINAL_count")] )
+                situ1 = figure(y_range = data1_1, plot_width=500, plot_height=300, title = "Situação dos alunos em 2018",toolbar_location=None, tooltips=[("Alunos", "@MEDIA_FINAL_count")] )
                 situ1.hbar(y= 'FORMA_EVASAO', height =0.4 , right = 'MEDIA_FINAL_count', source = data1_1)
 
                 #Ranking de Evadidos por curso (colocar por ordem decrescente)
                 data1_2 = alunos_por_ano.groupby('NOME_CURSO')
-                situ2 = figure(y_range = data1_2, plot_width=500, plot_height=300, title = "Alunos que evadiram por curso",
-										tooltips=[("Alunos", "@MEDIA_FINAL_count")] )
+                situ2 = figure(y_range = data1_2, plot_width=500, plot_height=300, title = "Alunos que evadiram por curso",toolbar_location=None,tooltips=[("Alunos", "@MEDIA_FINAL_count")] )
                 situ2.hbar(y= 'NOME_CURSO', height =0.4 , right = 'MEDIA_FINAL_count', source = data1_2)
                 
  

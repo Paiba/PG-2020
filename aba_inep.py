@@ -15,11 +15,8 @@ from bokeh.transform import factor_cmap
 from bokeh.transform import cumsum
 from math import pi
 ###
-class Aba_geografica:
+class Aba_inep:
 
          def __init__(self, dados):
-                data1 = dados[dados.FORMA_EVASAO == 'Evadiu'].reset_index()
-                data1 = data1.filter(['ID_CURSO_ALUNO','NACIONALIADE','UF_NATURALIDADE'])
-
-                
-                self.aba = layout([estado])
+               
+                self.aba = 0

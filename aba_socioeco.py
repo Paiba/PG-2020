@@ -15,11 +15,15 @@ from bokeh.transform import factor_cmap
 from bokeh.transform import cumsum
 from math import pi
 ###
-class Aba_geografica:
+class Aba_socio:
 
          def __init__(self, dados):
-                data1 = dados[dados.FORMA_EVASAO == 'Evadiu'].reset_index()
-                data1 = data1.filter(['ID_CURSO_ALUNO','NACIONALIADE','UF_NATURALIDADE'])
+                data1 =  dados[dados.FORMA_EVASAO == 'Evadiu'].reset_index()
 
-                
-                self.aba = layout([estado])
+                #
+                # data1_2 = data1.groupby('TIPO_INSTUICAO_SEGUNDO_GRAU')
+                #situ2 = figure(y_range = data1_2, plot_width=500, plot_height=300, title = "Alunos que evadiram por curso",
+										#tooltips=[("Alunos", "@MEDIA_FINAL_count")] )
+                #situ2.hbar(y= 'NOME_CURSO', height =0.4 , right = 'MEDIA_FINAL_count', source = data1_2)
+
+                self.aba = 0

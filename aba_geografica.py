@@ -18,8 +18,8 @@ from math import pi
 class Aba_geografica:
 
          def __init__(self, dados):
-                data1 = dados[dados.FORMA_EVASAO == 'Evadiu'].reset_index()
+                data1 = dados[dados.FORMA_EVASAO == 'Insucesso Acadêmico'].reset_index()
                 data1 = data1.filter(['ID_CURSO_ALUNO','NACIONALIADE','UF_NATURALIDADE'])
-
+                print(data1)
                 
-                self.aba = layout([estado])
+                self.aba = layout([])

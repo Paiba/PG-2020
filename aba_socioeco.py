@@ -15,7 +15,7 @@ from bokeh.transform import factor_cmap
 from bokeh.transform import cumsum
 from math import pi
 ###
-class Aba_socio:
+class Aba_socioeco:
 
          def __init__(self, dados):
                 data1 =  dados[dados.FORMA_EVASAO == 'Evadiu'].reset_index()

@@ -14,7 +14,7 @@ import numpy as np
 
 from tkinter import filedialog
 from bokeh.plotting import figure, output_file, show
-from bokeh.io import output_file, show
+from bokeh.io import curdoc,output_file, show
 from bokeh.models import ColumnDataSource, Grid, HBar, LinearAxis, Plot, HoverTool,BoxSelectTool, Panel, Tabs, CheckboxGroup
 from bokeh.layouts import layout
 from bokeh.palettes import Paired12
@@ -27,7 +27,8 @@ from math import pi
 from aba_geral import Aba_geral
 from aba_academico import Aba_academico
 from aba_geografica import Aba_geografica
-from aba_socio import Aba_socio
+from aba_socioeco import Aba_socioeco
+from aba_disciplina import Aba_disciplina
 
 def Main():
 
@@ -116,14 +117,14 @@ def Main():
 
         nome_evasao = ['Desistência','Desligamento: Resolução 68/2017-CEPE','Desligamento por Abandono','Desligamento: Descumpriu Plano de Estudos','Reopção de curso','Adaptação Curricular','Transferido','Desligamento: 3 reprovações em 1 disciplina'] #Grupo de diferentes nomenclaturas de evasão
         
-        tabela_simplifica_aluno['FORMA_EVASAO'] = tabela_refinada_aluno['FORMA_EVASAO'].replace(nome_evasao, 'Evadiu') #Mudando diversas nomenclaturas de evasão para evadiu
+        tabela_simplifica_aluno['FORMA_EVASAO'] = tabela_refinada_aluno['FORMA_EVASAO'].replace(nome_evasao, 'Insucesso Acadêmico') #Mudando diversas nomenclaturas de evasão para evadiu
         
         ###########
 
 
         #CONSTRUÇÃO DA TABELA DE DISCIPLINAS E CURSOS
-        tabela_refinada_disciplinas = tabela_bruta.filter(['COD_CURSO','NOME_CURSO','COD_DISCIPLINA','NOME_DISCIPLINA','MEDIA_FINAL','SITUACAO_DISCIPLINA'])
-        print(tabela_refinada_disciplinas)
+        tabela_refinada_disciplinas = tabela_bruta.filter(['NOME_CURSO','NOME_DISCIPLINA','MEDIA_FINAL','SITUACAO_DISCIPLINA','ANO_DISCIPLINA', 'SEMESTRE_DISCIPLINA'])
+        
         ##### html ######
 
         output_file('index.html')
@@ -132,19 +133,24 @@ def Main():
         SITUACAO = Aba_geral(tabela_simplifica_aluno)
         ACADEMICO = Aba_academico(tabela_simplifica_aluno)
         #GEOGRAFICA = Aba_geografica(tabela_simplifica_aluno)
+        DISCIPLINA = Aba_disciplina(tabela_refinada_disciplinas)
 
         ########### Layout de cada aba ####################
         aba_geral = SITUACAO.aba
         aba_acad = ACADEMICO.aba
         #aba_geog = GEOGRAFICA.aba
+        aba_disc = DISCIPLINA.aba
 
         ############  Abas #######################
         geral = Panel(child = aba_geral, title="Geral")
         academico = Panel(child = aba_acad, title="Rendimento Acadêmico")
         #geografico = Panel(child = aba_geog, title="Informações Geográficas")
+        discipli = Panel(child = aba_disc, title="Disciplinas dos Cursos")
 
-        tabs = Tabs(tabs=[geral, academico])
-
+        tabs = Tabs(tabs=[geral, academico, discipli])
+        
+        curdoc().add_root(tabs)
+        curdoc().title = "Painel de Controle"
         show(tabs)
 
 if __name__=='__main__':

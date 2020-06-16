@@ -19,7 +19,7 @@ class Aba_academico:
 
          def __init__(self, dados):
 
-                data1 =  dados[dados.FORMA_EVASAO == 'Evadiu'].reset_index()
+                data1 =  dados[dados.FORMA_EVASAO == 'Insucesso Acadêmico'].reset_index()
                 
                 #Quantidade de alunos evadidos absoluta por reprovações por falta
 

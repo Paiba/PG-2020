@@ -32,8 +32,9 @@ class Aba_geral:
                 situ1.hbar(y= 'FORMA_EVASAO', height =0.4 , right = 'MEDIA_FINAL_count', source = data1_1)
 
                 #Ranking de Evadidos por curso (colocar por ordem decrescente)
-                data1_2 = alunos_por_ano.groupby('NOME_CURSO')
-                situ2 = figure(y_range = data1_2, plot_width=500, plot_height=300, title = "Alunos que evadiram por curso",toolbar_location=None,tooltips=[("Alunos", "@MEDIA_FINAL_count")] )
+                data1_2 = alunos_por_ano[alunos_por_ano.FORMA_EVASAO == 'Insucesso Acadêmico']
+                data1_2 = data1_2.groupby('NOME_CURSO')
+                situ2 = figure(y_range = data1_2, plot_width=500, plot_height=300, title = "Insucesso acadêmico por curso",toolbar_location=None,tooltips=[("Alunos", "@MEDIA_FINAL_count")] )
                 situ2.hbar(y= 'NOME_CURSO', height =0.4 , right = 'MEDIA_FINAL_count', source = data1_2)
                 
  
@@ -62,7 +63,7 @@ class Aba_geral:
              
                 # Alunos que evadiram por ano de ingresso
                 ############################################################## Poderia mudar para faixas de anos
-                data2_1 = alunos_por_ano[alunos_por_ano.FORMA_EVASAO == 'Evadiu']
+                data2_1 = alunos_por_ano[alunos_por_ano.FORMA_EVASAO == 'Insucesso Acadêmico']
                 data2_1 = data2_1.groupby(['ANO_INGRESSO'])
                 situ4 = figure(plot_width=1000, plot_height=300, title="Alunos Evadidos em 2018 por Ano de Ingresso", x_range=data2_1, toolbar_location=None, tooltips=[("Alunos", "@MEDIA_FINAL_count")])
                 situ4.line(x= 'ANO_INGRESSO',y='MEDIA_FINAL_count',source = data2_1)

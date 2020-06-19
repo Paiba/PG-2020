@@ -128,29 +128,36 @@ def Main():
         ##### html ######
 
         output_file('index.html')
+        
 
-        ########### Classe de cada aba ####################
-        SITUACAO = Aba_geral(tabela_simplifica_aluno)
+        ################## SUBABAS ######################
+
         ACADEMICO = Aba_academico(tabela_simplifica_aluno)
+        ACADEMICO = Panel(child = ACADEMICO.aba, title="Rendimento Acadêmico")
         #GEOGRAFICA = Aba_geografica(tabela_simplifica_aluno)
+        #SOCIOECO = Aba_socioeco(tabela_simplifica_aluno)
+        
+        ########### Classe de cada aba ####################
+        SITUACAO = Aba_geral(tabela_simplifica_aluno)        
         DISCIPLINA = Aba_disciplina(tabela_refinada_disciplinas)
+        ALUNOS = Tabs(tabs = [ACADEMICO])
+       
 
         ########### Layout de cada aba ####################
         aba_geral = SITUACAO.aba
-        aba_acad = ACADEMICO.aba
+        aba_alunos = layout([ALUNOS])
         #aba_geog = GEOGRAFICA.aba
         aba_disc = DISCIPLINA.aba
-
+        
         ############  Abas #######################
         geral = Panel(child = aba_geral, title="Geral")
-        academico = Panel(child = aba_acad, title="Rendimento Acadêmico")
+        alunos= Panel(child = aba_alunos, title="Análise de Alunos Desistentes")
         #geografico = Panel(child = aba_geog, title="Informações Geográficas")
         discipli = Panel(child = aba_disc, title="Disciplinas dos Cursos")
 
-        tabs = Tabs(tabs=[geral, academico, discipli])
+        tabs = Tabs(tabs=[geral, alunos, discipli])
         
-        curdoc().add_root(tabs)
-        curdoc().title = "Painel de Controle"
+       
         show(tabs)
 
 if __name__=='__main__':

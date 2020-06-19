@@ -70,6 +70,5 @@ class Aba_disciplina:
 
                                
                 
-                curdoc().add_root(layout)
-                curdoc().title = "Painel de Controle"
+                
                 self.aba = layout

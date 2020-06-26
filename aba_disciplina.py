@@ -7,7 +7,7 @@ import numpy as np
 
 from tkinter import filedialog
 from bokeh.plotting import curdoc,figure, output_file, show
-from bokeh.io import output_file, show
+from bokeh.io import curdoc,output_file, show
 from bokeh.models import ColumnDataSource, Grid, HBar, LinearAxis, Plot, HoverTool,BoxSelectTool, Panel, Tabs, CheckboxGroup, Range1d, Select, RadioGroup, CustomJS
 from bokeh.layouts import layout,row, column
 from bokeh.palettes import Paired12
@@ -61,7 +61,7 @@ class Aba_disciplina:
 
                         else:
                                 data = reprovados.loc[reprovados['NOME_CURSO']==opcoes.value]
-                                data = data.sort_values(by ='PORCENTAGEM_REP',  ascending = False )
+                                data = data.sort_values(by ='PORCENTAGEM_REP',  ascending = False ).head()
                                 p = figure(y_range = data.NOME_DISCIPLINA, plot_width=600, plot_height=400)
                                 p.hbar(y= 'NOME_DISCIPLINA', height =0.4 , right = 'PORCENTAGEM_REP', source = data)
                         return p

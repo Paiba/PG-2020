@@ -7,7 +7,7 @@ import numpy as np
 
 from tkinter import filedialog
 from bokeh.plotting import figure, output_file, show
-from bokeh.io import output_file, show
+from bokeh.io import curdoc, output_file, show
 from bokeh.models import ColumnDataSource, Grid, HBar, LinearAxis, Plot, HoverTool,BoxSelectTool, Panel, Tabs, CheckboxGroup
 from bokeh.layouts import layout
 from bokeh.palettes import Paired12

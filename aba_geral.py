@@ -7,7 +7,7 @@ import numpy as np
 
 from tkinter import filedialog
 from bokeh.plotting import figure, output_file, show
-from bokeh.io import output_file, show
+from bokeh.io import curdoc,output_file, show
 from bokeh.models import ColumnDataSource, Grid, HBar, LinearAxis, Plot, HoverTool,BoxSelectTool, Panel, Tabs, CheckboxGroup
 from bokeh.layouts import layout
 from bokeh.palettes import Paired12
@@ -41,7 +41,7 @@ class Aba_geral:
 
 
 
-
+                '''
                 #Situação dos alunos organizados por ano de ingresso
 
                 ################################################################ Obs: seria melhor colocar numa cor só
@@ -73,7 +73,7 @@ class Aba_geral:
                 situ4.xgrid.grid_line_color = None
                 situ4.xaxis.axis_label = "Alunos evadidos por ano de ingresso"
                 situ4.outline_line_color = None
-
+                '''
 
                 
 
@@ -82,4 +82,4 @@ class Aba_geral:
 
 
 
-                self.aba = layout([[situ1,situ2],[situ3],[situ4]])
+                self.aba = layout([[situ1,situ2]])

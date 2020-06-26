@@ -16,7 +16,8 @@ from tkinter import filedialog
 from bokeh.plotting import figure, output_file, show
 from bokeh.io import curdoc,output_file, show
 from bokeh.models import ColumnDataSource, Grid, HBar, LinearAxis, Plot, HoverTool,BoxSelectTool, Panel, Tabs, CheckboxGroup
-from bokeh.layouts import layout
+from bokeh.models.widgets import FileInput
+from bokeh.layouts import layout,row, column
 from bokeh.palettes import Paired12
 from bokeh.transform import factor_cmap
 from bokeh.transform import cumsum
@@ -33,10 +34,15 @@ from aba_disciplina import Aba_disciplina
 def Main():
 
 # Leitura bruta do arquivo CSV
-        root = tk.Tk()
-        root.withdraw()
         
-        file_path = filedialog.askopenfilename()
+        ###### WIDGET DE SELEÇÃO DE ARQUIVOS(FAZER FUNCIONAR APROPRIADAMENTE)
+        file_input1 = FileInput(accept=".csv,.json,.txt", name = 'Dados UFES')
+        file_input2 = FileInput(accept=".csv,.json,.txt", name = 'Dados INEP')
+        file_input = row(file_input1,file_input2)
+
+        #Temporario, mudar para upar no painel
+        
+        file_path = '../data.csv'
         
         tabela = pd.read_csv(file_path)
         tabela_bruta = tabela
@@ -125,9 +131,6 @@ def Main():
         #CONSTRUÇÃO DA TABELA DE DISCIPLINAS E CURSOS
         tabela_refinada_disciplinas = tabela_bruta.filter(['NOME_CURSO','NOME_DISCIPLINA','MEDIA_FINAL','SITUACAO_DISCIPLINA','ANO_DISCIPLINA', 'SEMESTRE_DISCIPLINA'])
         
-        ##### html ######
-
-        output_file('index.html')
         
 
         ################## SUBABAS ######################
@@ -155,12 +158,17 @@ def Main():
         #geografico = Panel(child = aba_geog, title="Informações Geográficas")
         discipli = Panel(child = aba_disc, title="Disciplinas dos Cursos")
 
+     
+        
+        
         tabs = Tabs(tabs=[geral, alunos, discipli])
         
-       
-        show(tabs)
+        show(column(file_input,tabs))
+        curdoc().title = "Painel de Controle"
+        curdoc().add_root(column(file_input,tabs))
 
-if __name__=='__main__':
-    Main()
+#if __name__=='__main__':
+#    Main()
+Main()
 
 

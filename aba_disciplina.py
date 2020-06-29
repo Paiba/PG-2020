@@ -30,13 +30,17 @@ class Aba_disciplina:
                 qtd_aluno = disciplinas.groupby(['NOME_CURSO', 'NOME_DISCIPLINA']).SITUACAO_DISCIPLINA.count().to_frame().reset_index()
 
                 def update(attr, old, new):
-                        layout.children[1] = cria_graf()
+                        aba_completa.children[0] = cria_graf()
 
                 #Escolha de curso
                 cursos = disciplinas.NOME_CURSO.unique()
                 cursos = np.append(cursos,"UFES")
-                opcoes = Select(title = 'Curso', value = 'UFES',options =cursos.tolist())
-                opcoes.on_change('value', update)
+
+                curso_opcao = Select(title = 'Curso', value = 'UFES',options =cursos.tolist())
+                curso_opcao.on_change('value', update)
+                
+                indice_opcao = Select(value = 'Maior Índice de Reprovações',options = ['Maior Índice de Reprovações', 'Menor Índice de Reprovações'])
+                indice_opcao.on_change('value', update)
              
 
                 #Sub dataframe com quantidade de reprovados
@@ -54,21 +58,33 @@ class Aba_disciplina:
                 
                 #Top 5 matérias com mais reprovações
                 def cria_graf():
-                        if(opcoes.value == 'UFES'):
-                                data = reprovados.sort_values(by ='PORCENTAGEM_REP', ascending = False ).head()
-                                p = figure(y_range = data.NOME_DISCIPLINA, plot_width=600, plot_height=400)
+                        decresc = False
+                        titulo = 'Maiores'
+                        
+                        if(indice_opcao.value == 'Maior Índice de Reprovações'):
+                                decresc = False
+                                titulo = 'Maiores'
+                        else:
+                                decresc = True
+                                titulo = 'Menores'
+                        if(curso_opcao.value == 'UFES'):
+                                data = reprovados.sort_values(by ='PORCENTAGEM_REP', ascending = decresc ).head()
+                                p = figure(title = titulo+' Índices de Reprovação na UFES',y_range = data.NOME_DISCIPLINA, plot_width=800, plot_height=400,
+toolbar_location=None,tools="hover", tooltips="Índice de Reprovação : @PORCENTAGEM_REP %")
                                 p.hbar(y= 'NOME_DISCIPLINA', height =0.4, right = 'PORCENTAGEM_REP',left=0, source = data)
 
                         else:
-                                data = reprovados.loc[reprovados['NOME_CURSO']==opcoes.value]
-                                data = data.sort_values(by ='PORCENTAGEM_REP',  ascending = False ).head()
-                                p = figure(y_range = data.NOME_DISCIPLINA, plot_width=600, plot_height=400)
-                                p.hbar(y= 'NOME_DISCIPLINA', height =0.4 , right = 'PORCENTAGEM_REP', source = data)
+                                data = reprovados.loc[reprovados['NOME_CURSO']==curso_opcao.value]
+                                data = data.sort_values(by ='PORCENTAGEM_REP',  ascending = decresc ).head()
+                                p = figure(title = titulo+' Índices de Reprovação no curso '+curso_opcao.value,y_range = data.NOME_DISCIPLINA, plot_width=800, plot_height=400, toolbar_location=None,tools="hover", tooltips="Índice de Reprovação : @PORCENTAGEM_REP %")
+                                p.hbar(y= 'NOME_DISCIPLINA', height =0.4 , right = 'PORCENTAGEM_REP',left = 0, source = data)
+                        p.x_range.start = -0.1
+                        p.x_range.end = 100
                         return p
 
-                layout = row(opcoes, cria_graf())
+                aba_completa = row(cria_graf(),column(curso_opcao,indice_opcao))
 
                                
                 
                 
-                self.aba = layout
+                self.aba = aba_completa

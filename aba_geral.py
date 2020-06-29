@@ -47,7 +47,7 @@ class Aba_geral:
                 elif(self.situacao_opt.value == 'Sem evasão'):
                         data = self.alunos_por_ano[self.alunos_por_ano.FORMA_EVASAO == 'Sem evasão']
                 
-
+                
                 if not data.empty:
                         data = data.groupby('NOME_CURSO')
                         p = figure(y_range = data, plot_width=500, plot_height=300, title = self.situacao_opt.value ,toolbar_location=None,
@@ -88,11 +88,12 @@ class Aba_geral:
                 self.situacao_opt.on_change('value', update2)
 
                 #Seleção maiores ou menores gráfico 2
-                
+                self.maiormenor = Select(title = '', value = "Maior", options = ["Maior", "Menor"] )
+                self.maiormenor.on_change('value', update2)
 
                 #Disposição dos elementos na aba
                 situ1 = column(self.grafico1(),self.ano_ing_opcao, self.curso_opt)
-                situ2 =  column(self.grafico2(), self.situacao_opt)
+                situ2 =  column(self.grafico2(), self.situacao_opt,self.maiormenor)
                 aba_completa = row(situ1,situ2)
                 
                 self.aba =  aba_completa

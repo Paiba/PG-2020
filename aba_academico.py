@@ -81,7 +81,7 @@ class Aba_academico:
 
         #CONSTRUTOR DA ABA
         def __init__(self, dados):
-                self.data =  dados[dados.FORMA_EVASAO == 'Insucesso Acadêmico'].reset_index()
+                self.data =  dados[dados.FORMA_EVASAO == 'Insucesso acadêmico'].reset_index()
                 rep_falta = self.grafico1()
                 rep_nota = self.grafico2()
                 rendimento =  self.grafico3()

@@ -31,11 +31,11 @@ class Aba_geral:
 
                 if not data.empty:
                         data = data.groupby('FORMA_EVASAO')
-                        p = figure(y_range = data, plot_width=500, plot_height=300, title = "Situação dos alunos em 2018",toolbar_location=None,
+                        p = figure(y_range = data, plot_width=500, plot_height=300, title = "Situação dos alunos",toolbar_location=None,
                                 tooltips=[("Alunos","@MEDIA_FINAL_count")] )
                         p.hbar(y= 'FORMA_EVASAO', height =0.4 , right = 'MEDIA_FINAL_count', source = data)
                 else:
-                        p=figure(plot_width=500, plot_height=300, title = "Situação dos alunos em 2018",toolbar_location=None)
+                        p=figure(plot_width=500, plot_height=300, title = "Situação dos alunos",toolbar_location=None)
                 return p
 
         def grafico2(self):

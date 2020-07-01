@@ -27,7 +27,6 @@ from math import pi
 
 from aba_geral import Aba_geral
 from aba_academico import Aba_academico
-from aba_geografica import Aba_geografica
 from aba_socioeco import Aba_socioeco
 from aba_disciplina import Aba_disciplina
 

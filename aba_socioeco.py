@@ -16,9 +16,14 @@ from bokeh.transform import cumsum
 from math import pi
 ###
 class Aba_socioeco:
-
-         def __init__(self, dados):
-                data1 =  dados[dados.FORMA_EVASAO == 'Evadiu'].reset_index()
+        def grafico1(self):
+                p = figure()
+                return p;
+                
+        def __init__(self, dados):
+                self.data =  dados[dados.FORMA_EVASAO == 'Insucesso acadêmico'].reset_index()
+                
+                graf_socioeco = self.grafico1()
 
                 #
                 # data1_2 = data1.groupby('TIPO_INSTUICAO_SEGUNDO_GRAU')

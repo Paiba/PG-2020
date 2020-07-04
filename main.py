@@ -136,7 +136,6 @@ def Main():
 
         ACADEMICO = Aba_academico(tabela_simplifica_aluno)
         ACADEMICO = Panel(child = ACADEMICO.aba, title="Rendimento Acadêmico")
-        #GEOGRAFICA = Aba_geografica(tabela_simplifica_aluno)
         #SOCIOECO = Aba_socioeco(tabela_simplifica_aluno)
         
         ########### Classe de cada aba ####################
@@ -148,7 +147,7 @@ def Main():
         ########### Layout de cada aba ####################
         aba_geral = SITUACAO.aba
         aba_alunos = layout([ALUNOS])
-        #aba_geog = GEOGRAFICA.aba
+        #aba_socioeco = SOCIOECO.aba
         aba_disc = DISCIPLINA.aba
         
         ############  Abas #######################

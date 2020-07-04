@@ -25,10 +25,5 @@ class Aba_socioeco:
                 
                 graf_socioeco = self.grafico1()
 
-                #
-                # data1_2 = data1.groupby('TIPO_INSTUICAO_SEGUNDO_GRAU')
-                #situ2 = figure(y_range = data1_2, plot_width=500, plot_height=300, title = "Alunos que evadiram por curso",
-										#tooltips=[("Alunos", "@MEDIA_FINAL_count")] )
-                #situ2.hbar(y= 'NOME_CURSO', height =0.4 , right = 'MEDIA_FINAL_count', source = data1_2)
 
                 self.aba = 0

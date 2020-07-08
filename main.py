@@ -49,8 +49,9 @@ def Main():
         tabela_bruta = tabela_bruta.drop_duplicates(subset=enxuga)
         #dropar todas as linhas com matrícula(ESCREVER NA MONOGRAFIA)
         tabela_bruta = tabela_bruta[tabela_bruta.SITUACAO_DISCIPLINA != 'Matrícula']
-
-
+        tabela_bruta['RENDA_PER_CAPITA_AUFERIDA'] = tabela_bruta['RENDA_PER_CAPITA_AUFERIDA'].fillna(0)
+        
+                
         #CONSTRUÇÃO DA TABELA DE ALUNOS
         
         porcent_faltas = (tabela_bruta['NUM_FALTAS']/tabela_bruta['CH_DISCIPLINA'] )*100 #Faltas dividido pelo número de aulas
@@ -60,7 +61,8 @@ def Main():
         colunas_repetidas = ['ID_CURSO_ALUNO','COD_CURSO','NOME_CURSO',
         'ANO_INGRESSO','FORMA_INGRESSO','FORMA_EVASAO','PERIODO_ALUNO',
         'TIPO_INSTUICAO_SEGUNDO_GRAU','NACIONALIADE','NATURALIDADE',
-        'UF_NATURALIDADE','COTISTA','PLANO_ESTUDO']
+        'UF_NATURALIDADE','COTISTA','PLANO_ESTUDO', 'TIPO_AUXILIO',
+        'EMPREGO_SITUACAO','MORADIA_SITUACAO','RENDA_PER_CAPITA_AUFERIDA']
          
         #Coluna da média das porcentagens que o aluno faltou
         faltas = tabela_bruta.groupby(colunas_repetidas).PORCENTAGEM_FALTAS.mean().to_frame().reset_index()['PORCENTAGEM_FALTAS']
@@ -87,8 +89,6 @@ def Main():
         peso_notas = peso_notas.sort_values(by=['ID_CURSO_ALUNO']).reset_index().drop('index', axis=1)
         peso_notas = peso_notas['MEDIA_PONDERADA']
         
-
-        ######ARRUMAR#############
                              
                                 
         #Coluna com a quantidade de vezes que o aluno reprovou por falta
@@ -112,42 +112,35 @@ def Main():
         tabela_refinada_aluno['NUM_DISCIPLINA']=tabela_bruta.groupby(colunas_repetidas).MEDIA_FINAL.count().to_frame().reset_index()['MEDIA_FINAL'] 
         #Disciplinas feitas só são contadas quando uma média final é atribuída
 
-        
         ## SITUACÃO DOS ALUNOS ##
         
-        #########################################################################################################################################################
-        ###  !!!!  MUITO ENGESSADO, CASO HAJA ALGUM OUTRO TIPO DE EVASÃO NÃO COLOCADO NOS DADOS INCIALMENTE PASSADOS PARA MIM ISSO DEVE SER ATUALIZADO  !!!!  ###
-        ##########################################################################################################################################################
         tabela_simplifica_aluno = tabela_refinada_aluno
-
+        
         nome_evasao = ['Desistência','Desligamento: Resolução 68/2017-CEPE','Desligamento por Abandono','Desligamento: Descumpriu Plano de Estudos','Reopção de curso','Adaptação Curricular','Transferido','Desligamento: 3 reprovações em 1 disciplina'] #Grupo de diferentes nomenclaturas de evasão
         
         tabela_simplifica_aluno['FORMA_EVASAO'] = tabela_refinada_aluno['FORMA_EVASAO'].replace(nome_evasao, 'Insucesso acadêmico') #Mudando diversas nomenclaturas de evasão para evadiu
-        
-        ###########
-
-
+      
+        print(tabela_simplifica_aluno['FORMA_EVASAO'].unique())
         #CONSTRUÇÃO DA TABELA DE DISCIPLINAS E CURSOS
         tabela_refinada_disciplinas = tabela_bruta.filter(['NOME_CURSO','NOME_DISCIPLINA','MEDIA_FINAL','SITUACAO_DISCIPLINA','ANO_DISCIPLINA', 'SEMESTRE_DISCIPLINA'])
         
-        
-
         ################## SUBABAS ######################
 
         ACADEMICO = Aba_academico(tabela_simplifica_aluno)
         ACADEMICO = Panel(child = ACADEMICO.aba, title="Rendimento Acadêmico")
-        #SOCIOECO = Aba_socioeco(tabela_simplifica_aluno)
+
+        SOCIOECO = Aba_socioeco(tabela_simplifica_aluno)
+        SOCIOECO = Panel(child = SOCIOECO.aba, title ="Situação Socioeconômica")
         
         ########### Classe de cada aba ####################
         SITUACAO = Aba_geral(tabela_simplifica_aluno)        
         DISCIPLINA = Aba_disciplina(tabela_refinada_disciplinas)
-        ALUNOS = Tabs(tabs = [ACADEMICO])
+        ALUNOS = Tabs(tabs = [ACADEMICO, SOCIOECO])
        
 
         ########### Layout de cada aba ####################
         aba_geral = SITUACAO.aba
         aba_alunos = layout([ALUNOS])
-        #aba_socioeco = SOCIOECO.aba
         aba_disc = DISCIPLINA.aba
         
         ############  Abas #######################
@@ -164,7 +157,7 @@ def Main():
         show(column(file_input,tabs))
         curdoc().title = "Painel de Controle"
         curdoc().add_root(column(file_input,tabs))
-
+        
 #if __name__=='__main__':
 #    Main()
 Main()

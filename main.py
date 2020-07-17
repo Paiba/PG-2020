@@ -34,16 +34,12 @@ def Main():
 
 # Leitura bruta do arquivo CSV
         
-        ###### WIDGET DE SELEÇÃO DE ARQUIVOS(FAZER FUNCIONAR APROPRIADAMENTE)
-        file_input1 = FileInput(accept=".csv,.json,.txt", name = 'Dados UFES')
-        file_input2 = FileInput(accept=".csv,.json,.txt", name = 'Dados INEP')
-        file_input = row(file_input1,file_input2)
 
         #Temporario, mudar para upar no painel
         
-        file_path = '../data.csv'
+        file_path = '../data1.csv'
         
-        tabela = pd.read_csv(file_path)
+        tabela = pd.read_csv(file_path,nrows=1000000)
         tabela_bruta = tabela
         enxuga = ['ID_CURSO_ALUNO', 'COD_DISCIPLINA', 'ANO_DISCIPLINA','SEMESTRE_DISCIPLINA']
         tabela_bruta = tabela_bruta.drop_duplicates(subset=enxuga)
@@ -51,7 +47,14 @@ def Main():
         tabela_bruta = tabela_bruta[tabela_bruta.SITUACAO_DISCIPLINA != 'Matrícula']
         tabela_bruta['RENDA_PER_CAPITA_AUFERIDA'] = tabela_bruta['RENDA_PER_CAPITA_AUFERIDA'].fillna(0)
         
-                
+        cut_labels = ['Não Informada','Até um salário', 'Entre um e dois salários', 'Mais que três salários']
+        cut_bins = [0,1, 1045, 2090, 2000000]
+        tabela_bruta['RENDA_PER_CAPITA_AUFERIDA_FAIXA'] = pd.cut(tabela_bruta['RENDA_PER_CAPITA_AUFERIDA'], bins=cut_bins, labels=cut_labels)
+        tabela_bruta['RENDA_PER_CAPITA_AUFERIDA_FAIXA'] = tabela_bruta['RENDA_PER_CAPITA_AUFERIDA_FAIXA'].fillna('Não Informada')     
+               
+        tabela_bruta['RENDA_PER_CAPITA_AUFERIDA_FAIXA'] = tabela_bruta.RENDA_PER_CAPITA_AUFERIDA_FAIXA.astype(str)
+        
+              
         #CONSTRUÇÃO DA TABELA DE ALUNOS
         
         porcent_faltas = (tabela_bruta['NUM_FALTAS']/tabela_bruta['CH_DISCIPLINA'] )*100 #Faltas dividido pelo número de aulas
@@ -62,7 +65,7 @@ def Main():
         'ANO_INGRESSO','FORMA_INGRESSO','FORMA_EVASAO','PERIODO_ALUNO',
         'TIPO_INSTUICAO_SEGUNDO_GRAU','NACIONALIADE','NATURALIDADE',
         'UF_NATURALIDADE','COTISTA','PLANO_ESTUDO', 'TIPO_AUXILIO',
-        'EMPREGO_SITUACAO','MORADIA_SITUACAO','RENDA_PER_CAPITA_AUFERIDA']
+        'EMPREGO_SITUACAO','MORADIA_SITUACAO','RENDA_PER_CAPITA_AUFERIDA', 'RENDA_PER_CAPITA_AUFERIDA_FAIXA']
          
         #Coluna da média das porcentagens que o aluno faltou
         faltas = tabela_bruta.groupby(colunas_repetidas).PORCENTAGEM_FALTAS.mean().to_frame().reset_index()['PORCENTAGEM_FALTAS']
@@ -116,16 +119,17 @@ def Main():
         
         tabela_simplifica_aluno = tabela_refinada_aluno
         
-        nome_evasao = ['Desistência','Desligamento: Resolução 68/2017-CEPE','Desligamento por Abandono','Desligamento: Descumpriu Plano de Estudos','Reopção de curso','Adaptação Curricular','Transferido','Desligamento: 3 reprovações em 1 disciplina'] #Grupo de diferentes nomenclaturas de evasão
+        nome_evasao = ['Desistência','Desligamento: Resolução 68/2017-CEPE','Desligamento por Abandono','Desligamento: Descumpriu Plano de Estudos','Reopção de curso','Adaptação Curricular','Transferido','Desligamento: 3 reprovações em 1 disciplina','Transferência Interna', 'Reopção de Curso','Não Informado' , 'Jubilado', 'Desligamento por mandado judicial' ,'Conclusão de Aluno Especial', 'Falecimento' ,'Matricula desativada', 'Nulidade da matrícula - ato administrativo'] #Grupo de diferentes nomenclaturas de evasão
         
         tabela_simplifica_aluno['FORMA_EVASAO'] = tabela_refinada_aluno['FORMA_EVASAO'].replace(nome_evasao, 'Insucesso acadêmico') #Mudando diversas nomenclaturas de evasão para evadiu
       
-        print(tabela_simplifica_aluno['FORMA_EVASAO'].unique())
+        
         #CONSTRUÇÃO DA TABELA DE DISCIPLINAS E CURSOS
         tabela_refinada_disciplinas = tabela_bruta.filter(['NOME_CURSO','NOME_DISCIPLINA','MEDIA_FINAL','SITUACAO_DISCIPLINA','ANO_DISCIPLINA', 'SEMESTRE_DISCIPLINA'])
         
         ################## SUBABAS ######################
-
+        
+        
         ACADEMICO = Aba_academico(tabela_simplifica_aluno)
         ACADEMICO = Panel(child = ACADEMICO.aba, title="Rendimento Acadêmico")
 
@@ -154,9 +158,9 @@ def Main():
         
         tabs = Tabs(tabs=[geral, alunos, discipli])
         
-        show(column(file_input,tabs))
+        show(column(tabs))
         curdoc().title = "Painel de Controle"
-        curdoc().add_root(column(file_input,tabs))
+        curdoc().add_root(column(tabs))
         
 #if __name__=='__main__':
 #    Main()

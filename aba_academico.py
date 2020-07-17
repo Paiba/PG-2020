@@ -19,19 +19,34 @@ class Aba_academico:
 
         #Quantidade de alunos evadidos absoluta por reprovações por falta
         def grafico1(self):
-                if(self.tipo_rep.value == 'Por Frequência'):
-                        hist_rep, edges_rep = np.histogram(self.data['NUM_REP_FALTA'], density=False, bins=50)
-                        situacao = " por FREQUÊNCIA "
-                elif(self.tipo_rep.value == 'Por Nota'):               
-                        hist_rep, edges_rep = np.histogram(self.data['NUM_REP_NOTA'], density=False, bins=50)
-                        situacao = " por NOTA "
+                if(self.curso_rep.value=="Todos"):
+                        if(self.tipo_rep.value == 'Por Frequência'):
+                                hist_rep, edges_rep = np.histogram(self.data['NUM_REP_FALTA'], density=False, bins=200)
+                                situacao = " por FREQUÊNCIA "
+                        elif(self.tipo_rep.value == 'Por Nota'):               
+                                hist_rep, edges_rep = np.histogram(self.data['NUM_REP_NOTA'], density=False, bins=200)
+                                situacao = " por NOTA "
+                        else:
+                                hist_rep, edges_rep = np.histogram(self.data['NUM_REP_FALTA']+self.data['NUM_REP_NOTA'], density=False, bins=200)
+                                situacao =  " TOTAIS "
+                        fonte = {'right' : edges_rep[1:],
+                                 'left' : edges_rep[:-1],
+                                 'y' : hist_rep      }
                 else:
-                        hist_rep, edges_rep = np.histogram(self.data['NUM_REP_FALTA']+self.data['NUM_REP_NOTA'], density=False, bins=50)
-                        situacao =  " TOTAIS "
-                fonte = {'right' : edges_rep[1:],
-                         'left' : edges_rep[:-1],
-                         'y' : hist_rep      }              
-                reprovacoes = figure( plot_width=700, plot_height=300,title= "Reprovações"+ situacao +"entre Alunos Desistentes",toolbar_location=None, tooltips=[("Reprovações","@right{int}"),("Alunos","@y")])
+                        data = self.data.loc[self.data['NOME_CURSO']==self.curso_rep.value]
+                        if(self.tipo_rep.value == 'Por Frequência'):
+                                hist_rep, edges_rep = np.histogram(data['NUM_REP_FALTA'], density=False, bins=200)
+                                situacao = " por FREQUÊNCIA "
+                        elif(self.tipo_rep.value == 'Por Nota'):               
+                                hist_rep, edges_rep = np.histogram(data['NUM_REP_NOTA'], density=False, bins=200)
+                                situacao = " por NOTA "
+                        else:
+                                hist_rep, edges_rep = np.histogram(data['NUM_REP_FALTA']+data['NUM_REP_NOTA'], density=False, bins=200)
+                                situacao =  " TOTAIS "
+                        fonte = {'right' : edges_rep[1:],
+                                 'left' : edges_rep[:-1],
+                                 'y' : hist_rep      }              
+                reprovacoes = figure( plot_width=700, plot_height=300,title= "Reprovações"+ situacao +"entre Alunos Desistentes",tooltips=[("Reprovações","@left{int}"),("Alunos","@y")])
                 reprovacoes.quad(top='y', bottom=0, left='left', right='right',source =fonte, line_color="white")
                 reprovacoes.xaxis.axis_label = "Número de Reprovações"
                 reprovacoes.yaxis.axis_label = "Quantidade de Alunos"
@@ -66,7 +81,7 @@ class Aba_academico:
                 rendimento.xaxis.ticker = x
                 rendimento.xaxis.major_label_overrides = {1: '<5', 2: '>5 e <7', 3: '>7'}
                 rendimento.y_range.start = 0
-                rendimento.y_range.end = max(cr)+5
+                rendimento.y_range.end = max(cr)+max(cr)*0.1
                 return rendimento;
 
         #Frequência de presença de alunos desistentes
@@ -103,8 +118,13 @@ class Aba_academico:
                 def update1(attr, old, new):
                         reprovacoes.children[0] = self.grafico1()
 
-                self.tipo_rep = Select(title= "Tipo de Reprovações",options=["Todos","Por Nota", "Por Frequência"], value="Todos")
+                self.tipo_rep = Select(title = "Tipo de Reprovações",options=["Todos","Por Nota", "Por Frequência"], value="Todos")
                 self.tipo_rep.on_change('value', update1)
+                
+                nome_cursos =  self.data['NOME_CURSO'].unique()
+                nome_cursos = np.append(nome_cursos, "Todos")
+                self.curso_rep = Select(title = "Curso",options= nome_cursos.tolist(), value="Todos")
+                self.curso_rep.on_change('value', update1)
         
                 def update2(attr, old, new):
                         rendimento.children[0] = self.grafico2()
@@ -118,7 +138,7 @@ class Aba_academico:
                 self.tipo_exib1 = Select(title= "Exibição",options=["Porcentagem", "Absoluto"], value="Absoluto")
                 self.tipo_exib1.on_change('value', update3)
 
-                reprovacoes = row(self.grafico1(),self.tipo_rep)
+                reprovacoes = row(self.grafico1(),column(self.tipo_rep, self.curso_rep))
                 rendimento =  column(self.grafico2(), self.tipo_exib)
                 freq_falta = column(self.grafico3(), self.tipo_exib1)
                 self.aba = layout([[freq_falta,rendimento],[reprovacoes]])

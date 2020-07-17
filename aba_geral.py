@@ -92,8 +92,8 @@ class Aba_geral:
                 self.maiormenor.on_change('value', update2)
 
                 #Disposição dos elementos na aba
-                situ1 = column(self.grafico1(),self.ano_ing_opcao, self.curso_opt)
-                situ2 =  column(self.grafico2(), self.situacao_opt,self.maiormenor)
+                situ1 = column(self.grafico1(), self.ano_ing_opcao, self.curso_opt)
+                situ2 =  column(self.grafico2(), self.situacao_opt, self.maiormenor)
                 aba_completa = row(situ1,situ2)
                 
                 self.aba =  aba_completa

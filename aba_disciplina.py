@@ -54,7 +54,7 @@ class Aba_disciplina:
                 reprovados['Total'] = qtd_aluno['SITUACAO_DISCIPLINA']
                 reprovados = reprovados.loc[reprovados['Total']>10]
                 reprovados.rename(columns={'SITUACAO_DISCIPLINA':'REPROVADOS'}, inplace=True)
-        
+                reprovados['TUPLA'] = list(reprovados.NOME_CURSO+" "+reprovados.NOME_DISCIPLINA)
                 
                 #Top 5 matérias com mais reprovações
                 def cria_graf():
@@ -67,17 +67,18 @@ class Aba_disciplina:
                         else:
                                 decresc = True
                                 titulo = 'Menores'
+                                
                         if(curso_opcao.value == 'UFES'):
                                 data = reprovados.sort_values(by ='PORCENTAGEM_REP', ascending = decresc ).head()
-                                p = figure(title = titulo+' Índices de Reprovação na UFES',y_range = data.NOME_DISCIPLINA, plot_width=800, plot_height=400,
+                                p = figure(title = titulo+' Índices de Reprovação na UFES',y_range = data.TUPLA, plot_width=800, plot_height=400,
 toolbar_location=None,tools="hover", tooltips="Índice de Reprovação : @PORCENTAGEM_REP %")
-                                p.hbar(y= 'NOME_DISCIPLINA', height =0.4, right = 'PORCENTAGEM_REP',left=0, source = data)
+                                p.hbar(y= 'TUPLA', height =0.4, right = 'PORCENTAGEM_REP',left=0, source = data)
 
                         else:
                                 data = reprovados.loc[reprovados['NOME_CURSO']==curso_opcao.value]
                                 data = data.sort_values(by ='PORCENTAGEM_REP',  ascending = decresc ).head()
-                                p = figure(title = titulo+' Índices de Reprovação no curso '+curso_opcao.value,y_range = data.NOME_DISCIPLINA, plot_width=800, plot_height=400, toolbar_location=None,tools="hover", tooltips="Índice de Reprovação : @PORCENTAGEM_REP %")
-                                p.hbar(y= 'NOME_DISCIPLINA', height =0.4 , right = 'PORCENTAGEM_REP',left = 0, source = data)
+                                p = figure(title = titulo+' Índices de Reprovação no curso '+curso_opcao.value,y_range = data.TUPLA, plot_width=800, plot_height=400, toolbar_location=None,tools="hover", tooltips="Índice de Reprovação : @PORCENTAGEM_REP %")
+                                p.hbar(y= 'TUPLA', height =0.4 , right = 'PORCENTAGEM_REP',left = 0, source = data)
                         p.x_range.start = -0.1
                         p.x_range.end = 100
                         return p

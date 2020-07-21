@@ -47,7 +47,6 @@ class Aba_geral:
                 elif(self.situacao_opt.value == 'Sem evasão'):
                         data = self.alunos_por_ano[self.alunos_por_ano.FORMA_EVASAO == 'Sem evasão']
                 
-                
                 if not data.empty:
                         data = data.groupby('NOME_CURSO')
                         p = figure(y_range = data, plot_width=500, plot_height=300, title = self.situacao_opt.value ,toolbar_location=None,
@@ -58,9 +57,21 @@ class Aba_geral:
                 return p
 
         
+        def grafico3(self):
+                slope = [self.inep['Taxa_de_Desistencia_Acumulada'].mean()]*len(self.inep['Código do Curso de Graduação'])
+                p = figure(x_range = self.inep['Código do Curso de Graduação'],title = 'Taxa de Desistência Acumulada: Turmas de 2014',plot_width=1000, plot_height=400, toolbar_location=None)
+                renderer = p.vbar(top = 'Taxa_de_Desistencia_Acumulada', x='Código do Curso de Graduação', bottom = 0, width=0.5, fill_color="steelblue", source = self.inep)
+                p.add_tools(HoverTool(tooltips=[("Taxa de Desistência Acumulada","@Taxa_de_Desistencia_Acumulada"),("Nome do Curso","@Nome_do_Curso_de_Graduacao")],mode = "mouse",renderers=[renderer]))
+                renderer2= p.line(x=self.inep['Código do Curso de Graduação'], y=slope,line_color='red', line_width =2)
+                p.add_tools(HoverTool(tooltips = [("Média",'@y')],mode='mouse', renderers=[renderer2]))
+                p.xaxis.visible = False
+                return p
 
 
-        def __init__(self, dados):
+        def __init__(self, dados, inep):
+                self.inep = inep.groupby(['Nome da Instituição','Código do Curso de Graduação']).max().reset_index()
+                self.inep.rename(columns={'Taxa de Desistência Acumulada':'Taxa_de_Desistencia_Acumulada', 'Nome do Curso de Graduação':'Nome_do_Curso_de_Graduacao'},inplace = True)
+                self.inep['Código do Curso de Graduação'] = self.inep['Código do Curso de Graduação'].astype(str)
                 def update1(attr, old, new):
                         situ1.children[0] = self.grafico1()
                 def update2(attr, old, new):
@@ -94,7 +105,7 @@ class Aba_geral:
                 #Disposição dos elementos na aba
                 situ1 = column(self.grafico1(), self.ano_ing_opcao, self.curso_opt)
                 situ2 =  column(self.grafico2(), self.situacao_opt, self.maiormenor)
-                aba_completa = row(situ1,situ2)
+                aba_completa = column(row(situ1,situ2), self.grafico3())
                 
                 self.aba =  aba_completa
                 ################## GRÁFICOS DA PRIMEIRA ABA ###############################

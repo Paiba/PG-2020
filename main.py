@@ -37,8 +37,7 @@ def Main():
 
         #Temporario, mudar para upar no painel
         
-        file_path = '../data1.csv'
-        
+        file_path = '../data.csv'
         tabela = pd.read_csv(file_path,nrows=1000000)
         tabela_bruta = tabela
         enxuga = ['ID_CURSO_ALUNO', 'COD_DISCIPLINA', 'ANO_DISCIPLINA','SEMESTRE_DISCIPLINA']
@@ -53,8 +52,12 @@ def Main():
         tabela_bruta['RENDA_PER_CAPITA_AUFERIDA_FAIXA'] = tabela_bruta['RENDA_PER_CAPITA_AUFERIDA_FAIXA'].fillna('Não Informada')     
                
         tabela_bruta['RENDA_PER_CAPITA_AUFERIDA_FAIXA'] = tabela_bruta.RENDA_PER_CAPITA_AUFERIDA_FAIXA.astype(str)
+        #######################################################
         
-              
+        file_path2 = '../inep-ufes-tratado.xlsx'
+        tabela_inep = pd.read_excel(file_path2)
+        
+               
         #CONSTRUÇÃO DA TABELA DE ALUNOS
         
         porcent_faltas = (tabela_bruta['NUM_FALTAS']/tabela_bruta['CH_DISCIPLINA'] )*100 #Faltas dividido pelo número de aulas
@@ -137,7 +140,7 @@ def Main():
         SOCIOECO = Panel(child = SOCIOECO.aba, title ="Situação Socioeconômica")
         
         ########### Classe de cada aba ####################
-        SITUACAO = Aba_geral(tabela_simplifica_aluno)        
+        SITUACAO = Aba_geral(tabela_simplifica_aluno, tabela_inep)        
         DISCIPLINA = Aba_disciplina(tabela_refinada_disciplinas)
         ALUNOS = Tabs(tabs = [ACADEMICO, SOCIOECO])
        

@@ -37,7 +37,7 @@ def Main():
 
         #Temporario, mudar para upar no painel
         
-        file_path = '../data.csv'
+        file_path = '../data1.csv'
         tabela = pd.read_csv(file_path,nrows=1000000)
         tabela_bruta = tabela
         enxuga = ['ID_CURSO_ALUNO', 'COD_DISCIPLINA', 'ANO_DISCIPLINA','SEMESTRE_DISCIPLINA']

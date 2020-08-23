@@ -15,7 +15,7 @@ from bokeh.plotting import figure, output_file, show
 from bokeh.io import curdoc,output_file, show
 from bokeh.models import ColumnDataSource, Grid, HBar, LinearAxis, Plot, HoverTool,BoxSelectTool, Panel, Tabs, CheckboxGroup
 from bokeh.models.widgets import FileInput
-from bokeh.layouts import layout,row, column
+from bokeh.layouts import layout,row, column, Spacer
 from bokeh.palettes import Paired12
 from bokeh.transform import factor_cmap
 from bokeh.transform import cumsum

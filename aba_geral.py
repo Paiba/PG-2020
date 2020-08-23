@@ -19,21 +19,27 @@ class Aba_geral:
                 data=[]
                 if(self.ano_ing_opcao.value == 'Todos'):
                        data = self.alunos_por_ano
+                       part_titulo = ""
                 else:
                        data = self.alunos_por_ano.loc[self.alunos_por_ano['ANO_INGRESSO'] == self.ano_ing_opcao.value]
+                       part_titulo = " (Ingressantes de "+ self.ano_ing_opcao.value+")"
 
                 if(self.curso_opt.value == 'Todos'):
-                       pass;
+                       titulo = "Situação dos alunos da UFES "+part_titulo
                 else:
                        data = data.loc[data['NOME_CURSO'] == self.curso_opt.value]
-
+                       titulo = "Situação dos alunos da UFES do curso "+self.curso_opt.value+part_titulo
+                
                 if not data.empty:
-                        data = data.groupby('FORMA_EVASAO')
-                        p = figure(y_range = data, plot_width=500, plot_height=300, title = "Situação dos alunos",toolbar_location=None,
-                                tooltips=[("Alunos","@MEDIA_FINAL_count")] )
-                        p.hbar(y= 'FORMA_EVASAO', height =0.4 , right = 'MEDIA_FINAL_count', source = data)
+                        data = data['FORMA_EVASAO'].value_counts()
+                        data = data.reset_index(name='value').rename(columns={'index':'legenda'})
+                        data = data.sort_values('value', ascending=True)
+                        data['porc'] = (data['value']/data['value'].sum())*100
+                        p = figure(y_range = data.legenda, plot_width=700, plot_height=300, title = titulo,toolbar_location=None,
+                                tooltips=[("Alunos","@value"),("%","@porc{1.1}%")] )
+                        p.hbar(y= 'legenda', height =0.4 , right = 'value', source = data)
                 else:
-                        p=figure(plot_width=500, plot_height=300, title = "Situação dos alunos",toolbar_location=None)
+                        p=figure(plot_width=700, plot_height=300, title = "Situação dos alunos",toolbar_location=None)
                 return p
 
         def grafico2(self):
@@ -44,12 +50,18 @@ class Aba_geral:
                         data = self.alunos_por_ano[self.alunos_por_ano.FORMA_EVASAO == 'Formado']
                 elif(self.situacao_opt.value == 'Sem evasão'):
                         data = self.alunos_por_ano[self.alunos_por_ano.FORMA_EVASAO == 'Sem evasão']
-                
                 if not data.empty:
-                        data = data.groupby('NOME_CURSO')
-                        p = figure(y_range = data, plot_width=500, plot_height=300, title = self.situacao_opt.value ,toolbar_location=None,
-                                tooltips=[("Alunos", "@MEDIA_FINAL_count")] )
-                        p.hbar(y= 'NOME_CURSO', height =0.4 , right = 'MEDIA_FINAL_count', source = data)
+                        data = data['NOME_CURSO'].value_counts()
+                        data = data.reset_index(name='value').rename(columns={'index':'legenda'})
+                        if(self.maiormenor.value == 'Maior'):
+                                data = data.head(15).sort_values('value', ascending=True)
+                                titulo = "15 Cursos com MAIOR quantidade de alunos em situação: "+self.situacao_opt.value
+                        elif(self.maiormenor.value == 'Menor'):
+                                data = data.tail(15)
+                                titulo = "15 cursos com MENOR quantidade de alunos em situação: "+self.situacao_opt.value
+                        p = figure(y_range = data.legenda, plot_width=700, plot_height=300, title = titulo ,toolbar_location=None,
+                                tooltips=[("Alunos", "@value")] )
+                        p.hbar(y= 'legenda', height =0.4 , right = 'value', source = data)
                 else:
                         p=figure(plot_width=500, plot_height=300, title = "bla", toolbar_location=None)
                 return p
@@ -57,7 +69,7 @@ class Aba_geral:
         
         def grafico3(self):
                 slope = [self.inep['Taxa_de_Desistencia_Acumulada'].mean()]*len(self.inep['Código do Curso de Graduação'])
-                p = figure(x_range = self.inep['Código do Curso de Graduação'],title = 'Taxa de Desistência Acumulada: Turmas de 2014',plot_width=1000, plot_height=400, toolbar_location=None)
+                p = figure(x_range = self.inep['Código do Curso de Graduação'],title = 'Taxa de Desistência Acumulada: Turmas de 2014',plot_width=1400, plot_height=400, toolbar_location=None)
                 renderer = p.vbar(top = 'Taxa_de_Desistencia_Acumulada', x='Código do Curso de Graduação', bottom = 0, width=0.5, fill_color="steelblue", source = self.inep)
                 p.add_tools(HoverTool(tooltips=[("Taxa de Desistência Acumulada","@Taxa_de_Desistencia_Acumulada"),("Nome do Curso","@Nome_do_Curso_de_Graduacao")],mode = "mouse",renderers=[renderer]))
                 renderer2= p.line(x=self.inep['Código do Curso de Graduação'], y=slope,line_color='red', line_width =2)

@@ -7,7 +7,7 @@ import numpy as np
 from bokeh.plotting import figure, output_file, show
 from bokeh.io import output_file, show
 from bokeh.models import ColumnDataSource, Grid, HBar, LinearAxis, Plot, HoverTool,BoxSelectTool, Panel, Tabs, CheckboxGroup, Select
-from bokeh.layouts import layout, column, row
+from bokeh.layouts import layout, column, row, Spacer
 from bokeh.palettes import Paired12
 from bokeh.transform import factor_cmap,cumsum
 from math import pi

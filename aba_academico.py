@@ -1,11 +1,9 @@
 import pandas as pd
-import tkinter as tk
 import bokeh as bk
 import matplotlib as mpl
 import numpy as np
 
 
-from tkinter import filedialog
 from bokeh.plotting import figure, output_file, show
 from bokeh.io import curdoc, output_file, show
 from bokeh.models import ColumnDataSource, Grid, HBar, LinearAxis, Plot, HoverTool,BoxSelectTool, Panel, Tabs, Select
@@ -104,10 +102,13 @@ class Aba_academico:
                         fonte['value'] = (fonte['value']/fonte['value'].sum())*100
                         exibir = "@value{1.1}%"
                 freq_falta = figure(plot_width=500, plot_height=300, title="Frequência dos Alunos que Evadiram", toolbar_location=None,tools="hover", tooltips=exibir)
-                freq_falta.wedge(x=0, y=1, radius=0.4, start_angle=cumsum('angle', include_zero=True), end_angle=cumsum('angle'),line_color="white", fill_color='color', legend='frequencia', source=fonte)
-                freq_falta.x_range.start = -0.6
+                freq_falta.wedge(x=2, y=1.5, radius=1.2, start_angle=cumsum('angle', include_zero=True), end_angle=cumsum('angle'),line_color="white", fill_color='color', legend='frequencia', source=fonte)
+                freq_falta.x_range.start = 0
+                freq_falta.y_range.start = 0
+                freq_falta.x_range.end = 5
+                freq_falta.y_range.end = 3
                 freq_falta.legend.location = "top_right"
-                freq_falta.axis.visible = False
+                #freq_falta.axis.visible = False
                 return freq_falta;
 
 

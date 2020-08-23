@@ -1,11 +1,9 @@
 import pandas as pd
-import tkinter as tk
 import bokeh as bk
 import matplotlib as mpl
 import numpy as np
 
 
-from tkinter import filedialog
 from bokeh.plotting import figure, output_file, show
 from bokeh.io import output_file, show
 from bokeh.models import ColumnDataSource, Grid, HBar, LinearAxis, Plot, HoverTool,BoxSelectTool, Panel, Tabs, CheckboxGroup, Select
@@ -52,8 +50,11 @@ class Aba_socioeco:
                         data_aux =  data_aux.append(linha_extra, ignore_index = True)
                         data = data_aux
                 data['color'] = self.cores[:len(data)]
-                p.wedge(x=0, y=1, radius=0.4, start_angle=cumsum('angle', include_zero=True), end_angle=cumsum('angle'),line_color="white", fill_color='color', legend='legenda', source=data)
-                p.x_range.start = -0.6
+                p.wedge(x=2.1, y=2.3, radius=2, start_angle=cumsum('angle', include_zero=True), end_angle=cumsum('angle'),line_color="white", fill_color='color', legend='legenda', source=data)
+                p.x_range.start = 0
+                p.y_range.start = 0
+                p.x_range.end = 6
+                p.y_range.end = 4.5
                 p.legend.location = "top_right"
                 p.axis.visible = False
                 return p;
@@ -159,9 +160,12 @@ class Aba_socioeco:
                         data_aux =  data_aux.append(linha_extra, ignore_index = True)
                         data = data_aux
                 data['color'] = self.cores[:len(data)]
-                p.wedge(x=0, y=1, radius=0.4, start_angle=cumsum('angle', include_zero=True), end_angle=cumsum('angle'),line_color="white",legend='legenda', fill_color='color', source=data)
+                p.wedge(x=2.1, y=2.3, radius=2, start_angle=cumsum('angle', include_zero=True), end_angle=cumsum('angle'),line_color="white",legend='legenda', fill_color='color', source=data)
                 p.legend.location = "top_right"
-                p.x_range.start = -0.6
+                p.x_range.start = 0
+                p.y_range.start = 0
+                p.x_range.end = 6
+                p.y_range.end = 4.5
                 p.axis.visible = False
                 return p;
                         

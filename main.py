@@ -6,13 +6,11 @@ Codigo do painel de controle feito com a finalidade de projeto de graduacao pela
 """
 # Imports
 import pandas as pd
-import tkinter as tk
 import bokeh as bk
 import matplotlib as mpl
 import numpy as np
 
 
-from tkinter import filedialog
 from bokeh.plotting import figure, output_file, show
 from bokeh.io import curdoc,output_file, show
 from bokeh.models import ColumnDataSource, Grid, HBar, LinearAxis, Plot, HoverTool,BoxSelectTool, Panel, Tabs, CheckboxGroup

@@ -50,7 +50,7 @@ class Aba_academico:
                 reprovacoes.quad(top='y', bottom=0, left='left', right='right',source =fonte, line_color="white")
                 reprovacoes.xaxis.axis_label = "Número de Reprovações"
                 reprovacoes.yaxis.axis_label = "Quantidade de Alunos"
-                return reprovacoes;
+                return reprovacoes
 
         #Coeficiente de Rendimento dos alunos desistentes
         def grafico2(self):
@@ -88,7 +88,7 @@ class Aba_academico:
                 rendimento.xaxis.major_label_overrides = {1: '<5', 2: '>5 e <7', 3: '>7'}
                 rendimento.y_range.start = 0
                 rendimento.y_range.end = max(cr)+max(cr)*0.1
-                return rendimento;
+                return rendimento
 
         #Frequência de presença de alunos desistentes
         def grafico3(self):
@@ -123,13 +123,12 @@ class Aba_academico:
                 freq_falta.y_range.end = 3
                 freq_falta.legend.location = "top_right"
                 #freq_falta.axis.visible = False
-                return freq_falta;
+                return freq_falta
 
 
         #CONSTRUTOR DA ABA
         def __init__(self, dados):
                 self.data =  dados[dados.FORMA_EVASAO == 'Insucesso acadêmico'].reset_index()
-                print(self.data)
                 def update1(attr, old, new):
                         linha1.children[0] = self.grafico3()
                         linha1.children[1] = self.grafico2()

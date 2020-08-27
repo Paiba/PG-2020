@@ -54,7 +54,7 @@ class Aba_academico:
 
         #Coeficiente de Rendimento dos alunos desistentes
         def grafico2(self):
-                titulo = "Rendimento dos Alunos Desistentes"
+                titulo = "Coeficiente Rendimento dos Alunos Desistentes"
                 if(self.curso_rep.value=="Todos"):
                         data = self.data
                 else:
@@ -62,7 +62,7 @@ class Aba_academico:
                         titulo = titulo+" ("+self.curso_rep.value+")"
                 cr = [0,0,0]
                 x=[1,2,3]
-                faixa = ['<5', '>5 e <7','>7']
+                faixa = ['Menor que 5', 'Entre 5 e 7','Maior que 7']
                 for i in data['MEDIA_PONDERADA']:
                         if i<=5:
                                cr[0]=cr[0]+1
@@ -80,14 +80,15 @@ class Aba_academico:
                          'faixa':faixa,
                          'alunos':cr      }
 
-                rendimento = figure(plot_width=700, plot_height=400,title= titulo,toolbar_location=None)
-                circle_renderer = rendimento.circle(x='x',y='alunos',size=5, color="navy", alpha=0.5, source= fonte)
+                rendimento = figure(plot_width=700, plot_height=350,title= titulo,toolbar_location=None)
+                circle_renderer = rendimento.circle(x='x',y='alunos',size=10, color="navy", alpha=0.5, source= fonte)
                 rendimento.line(x,cr,line_width=2)
                 rendimento.add_tools(HoverTool(tooltips=[("Alunos", exibir ),('Faixa do CR','@faixa')],mode = "mouse",renderers=[circle_renderer]))
                 rendimento.xaxis.ticker = x
-                rendimento.xaxis.major_label_overrides = {1: '<5', 2: '>5 e <7', 3: '>7'}
+                rendimento.xaxis.major_label_overrides = {1: 'Menor que 5', 2: 'Entre 5 e 7', 3: 'Maior que 7'}
                 rendimento.y_range.start = 0
                 rendimento.y_range.end = max(cr)+max(cr)*0.1
+                rendimento.yaxis.visible = False
                 return rendimento
 
         #Frequência de presença de alunos desistentes
@@ -115,48 +116,41 @@ class Aba_academico:
                 if(self.tipo_exib.value == "Porcentagem"):
                         fonte['value'] = (fonte['value']/fonte['value'].sum())*100
                         exibir = "@value{1.1}%"
-                freq_falta = figure(plot_width=700, plot_height=400, title=titulo, toolbar_location=None,tools="hover", tooltips=exibir)
-                freq_falta.wedge(x=2, y=1.5, radius=1.2, start_angle=cumsum('angle', include_zero=True), end_angle=cumsum('angle'),line_color="white", fill_color='color', legend='frequencia', source=fonte)
+                freq_falta = figure(plot_width=700, plot_height=350, title=titulo, toolbar_location=None,tools="hover", tooltips=exibir)
+                freq_falta.wedge(x=2, y=1.5, radius=1, start_angle=cumsum('angle', include_zero=True), end_angle=cumsum('angle'),line_color="white", fill_color='color', legend='frequencia', source=fonte)
                 freq_falta.x_range.start = 0
                 freq_falta.y_range.start = 0
                 freq_falta.x_range.end = 5
                 freq_falta.y_range.end = 3
                 freq_falta.legend.location = "top_right"
-                #freq_falta.axis.visible = False
+                freq_falta.axis.visible = False
                 return freq_falta
 
 
         #CONSTRUTOR DA ABA
         def __init__(self, dados):
                 self.data =  dados[dados.FORMA_EVASAO == 'Insucesso acadêmico'].reset_index()
+
                 def update1(attr, old, new):
-                        linha1.children[0] = self.grafico3()
-                        linha1.children[1] = self.grafico2()
+                        linha1.children[0:2] = [self.grafico3(),self.grafico2()]
                         reprovacoes.children[0] = self.grafico1()
-                        
-                        
 
-
-                self.tipo_rep = Select(title = "Tipo de Reprovações",options=["Todos","Por Nota", "Por Frequência"], value="Todos")
-                self.tipo_rep.on_change('value', update1)
-                
                 nome_cursos =  self.data['NOME_CURSO'].unique()
-                nome_cursos = np.append(nome_cursos, "Todos")
+                nome_cursos = np.append(nome_cursos, "Todos")     
+                        
+                self.tipo_rep = Select(title = "Tipo de Reprovações",options=["Todos","Por Nota", "Por Frequência"], value="Todos")
+                self.tipo_rep.on_change('value', update1)                
+
                 self.curso_rep = Select(title = "Curso",options= nome_cursos.tolist(), value="Todos")
                 self.curso_rep.on_change('value', update1)
-        
-                def update2(attr, old, new):
-                        linha1.children[1] = self.grafico2()
-                        linha1.children[0] = self.grafico3()
-
-
 
                 self.tipo_exib = Select(title= "Exibição",options=["Porcentagem", "Absoluto"], value="Absoluto")
-                self.tipo_exib.on_change('value', update2)
+                self.tipo_exib.on_change('value', update1)
 
-                reprovacoes = column(self.grafico1(),self.tipo_rep)
+                reprovacoes = row(self.grafico1())
                 linha1 = row(self.grafico3(),self.grafico2())
-                self.aba = layout([[self.tipo_exib, self.curso_rep],[linha1],[reprovacoes]])
+
+                self.aba = layout([self.tipo_exib, self.curso_rep],[linha1],[[reprovacoes,self.tipo_rep]] )
 
             
                 

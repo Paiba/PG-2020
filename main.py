@@ -52,12 +52,11 @@ def Main():
         tabela_bruta['RENDA_PER_CAPITA_AUFERIDA_FAIXA'] = tabela_bruta.RENDA_PER_CAPITA_AUFERIDA_FAIXA.astype(str)
         #######################################################
         
-        file_path2 = '../inep-ufes-tratado.xlsx'
-        tabela_inep = pd.read_excel(file_path2)
         
-        file_path3 = '../inep-ufes.xlsx'
-        tabela_inep2 = pd.read_excel(file_path3, header=8)
-
+        
+        file_path2 = '../inep-ufes.xlsx'
+        tabela_inep = pd.read_excel(file_path2, header=8)
+        
                
         #CONSTRUÇÃO DA TABELA DE ALUNOS
         

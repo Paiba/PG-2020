@@ -57,25 +57,25 @@ class Aba_disciplina:
                 #Top 5 matérias com mais reprovações
                 def cria_graf():
                         decresc = False
-                        titulo = 'Maiores'
+                        titulo = '10 Maiores'
                         
                         if(indice_opcao.value == 'Maior Índice de Reprovações'):
                                 decresc = False
-                                titulo = 'Maiores'
+                                titulo = '10 Maiores'
                         else:
                                 decresc = True
-                                titulo = 'Menores'
+                                titulo = '10 Menores'
                                 
                         if(curso_opcao.value == 'UFES'):
-                                data = reprovados.sort_values(by ='PORCENTAGEM_REP', ascending = decresc ).head()
-                                p = figure(title = titulo+' Índices de Reprovação na UFES',y_range = data.TUPLA, plot_width=800, plot_height=400,
+                                data = reprovados.sort_values(by ='PORCENTAGEM_REP', ascending = decresc ).head(10)
+                                p = figure(title = titulo+' Índices de Reprovação na UFES',y_range = data.TUPLA, plot_width=1200, plot_height=800,
 toolbar_location=None,tools="hover", tooltips="Índice de Reprovação : @PORCENTAGEM_REP %")
                                 p.hbar(y= 'TUPLA', height =0.4, right = 'PORCENTAGEM_REP',left=0, source = data)
 
                         else:
                                 data = reprovados.loc[reprovados['NOME_CURSO']==curso_opcao.value]
-                                data = data.sort_values(by ='PORCENTAGEM_REP',  ascending = decresc ).head()
-                                p = figure(title = titulo+' Índices de Reprovação no curso '+curso_opcao.value,y_range = data.TUPLA, plot_width=800, plot_height=400, toolbar_location=None,tools="hover", tooltips="Índice de Reprovação : @PORCENTAGEM_REP %")
+                                data = data.sort_values(by ='PORCENTAGEM_REP',  ascending = decresc ).head(10)
+                                p = figure(title = titulo+' Índices de Reprovação no curso '+curso_opcao.value,y_range = data.TUPLA, plot_width=1200, plot_height=800, toolbar_location=None,tools="hover", tooltips="Índice de Reprovação : @PORCENTAGEM_REP %")
                                 p.hbar(y= 'TUPLA', height =0.4 , right = 'PORCENTAGEM_REP',left = 0, source = data)
                         p.x_range.start = -0.1
                         p.x_range.end = 100

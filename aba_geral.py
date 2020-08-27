@@ -68,20 +68,20 @@ class Aba_geral:
 
         
         def grafico3(self):
-                slope = [self.inep['Taxa_de_Desistencia_Acumulada'].mean()]*len(self.inep['Código do Curso de Graduação'])
-                p = figure(x_range = self.inep['Código do Curso de Graduação'],title = 'Taxa de Desistência Acumulada: Turmas de 2014',plot_width=1400, plot_height=400, toolbar_location=None)
-                renderer = p.vbar(top = 'Taxa_de_Desistencia_Acumulada', x='Código do Curso de Graduação', bottom = 0, width=0.5, fill_color="steelblue", source = self.inep)
-                p.add_tools(HoverTool(tooltips=[("Taxa de Desistência Acumulada","@Taxa_de_Desistencia_Acumulada"),("Nome do Curso","@Nome_do_Curso_de_Graduacao")],mode = "mouse",renderers=[renderer]))
-                renderer2= p.line(x=self.inep['Código do Curso de Graduação'], y=slope,line_color='red', line_width =2)
+                p = figure(plot_width =1400,plot_height = 500)
+                slope = [self.inep['TDA'].mean()]*len(self.inep['CO_CURSO'])
+                p = figure(x_range = self.inep['CO_CURSO'],title = 'Taxa de Desistência Acumulada: Turmas de 2014',plot_width=1400, plot_height=400, toolbar_location=None)
+                renderer = p.vbar(top = 'TDA', x='CO_CURSO', bottom = 0, width=0.5, fill_color="steelblue", source = self.inep)
+                p.add_tools(HoverTool(tooltips=[("Taxa de Desistência Acumulada","@TDA"),("Nome do Curso","@NO_CURSO")],mode = "mouse",renderers=[renderer]))
+                renderer2= p.line(x=self.inep['CO_CURSO'], y=slope,line_color='red', line_width =2)
                 p.add_tools(HoverTool(tooltips = [("Média",'@y')],mode='mouse', renderers=[renderer2]))
                 p.xaxis.visible = False
                 return p
 
 
         def __init__(self, dados, inep):
-                self.inep = inep.groupby(['Nome da Instituição','Código do Curso de Graduação']).max().reset_index()
-                self.inep.rename(columns={'Taxa de Desistência Acumulada':'Taxa_de_Desistencia_Acumulada', 'Nome do Curso de Graduação':'Nome_do_Curso_de_Graduacao'},inplace = True)
-                self.inep['Código do Curso de Graduação'] = self.inep['Código do Curso de Graduação'].astype(str)
+                self.inep = inep.groupby(['NO_IES','CO_CURSO']).max().reset_index()
+                self.inep['CO_CURSO'] = self.inep['CO_CURSO'].astype(str)
                 def update1(attr, old, new):
                         situ1.children[0] = self.grafico1()
                 def update2(attr, old, new):

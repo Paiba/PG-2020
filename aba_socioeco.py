@@ -100,6 +100,7 @@ class Aba_socioeco:
                                 data_aux =  data_aux.append(linha_extra, ignore_index = True)
                                 data = data_aux 
                         p = figure(x_range = data.legenda,title = 'Situação de moradia dos alunos desistentes',plot_width=500, plot_height=700, toolbar_location=None,tools="hover", tooltips="@legenda: @value")
+                
                 p.yaxis.axis_label ="Alunos"   
                 p.vbar(top = 'value', x='legenda', bottom = 0, width=0.5, fill_color="steelblue", source =  data)
                 p.yaxis.axis_label ="Alunos"

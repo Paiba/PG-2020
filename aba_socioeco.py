@@ -6,7 +6,7 @@ import numpy as np
 
 from bokeh.plotting import figure, output_file, show
 from bokeh.io import output_file, show
-from bokeh.models import ColumnDataSource, Grid, HBar, LinearAxis, Plot, HoverTool,BoxSelectTool, Panel, Tabs, CheckboxGroup, Select
+from bokeh.models import ColumnDataSource, Grid, HBar, LinearAxis, Plot, HoverTool,BoxSelectTool, Panel, Tabs, CheckboxGroup, Select, CustomJS
 from bokeh.layouts import layout, column, row, Spacer
 from bokeh.palettes import Paired12
 from bokeh.transform import factor_cmap,cumsum
@@ -22,16 +22,16 @@ class Aba_socioeco:
 
         def grafico1_1(self):
                 if(self.graf_opt1.value == 'Renda per Capita'):
-                        p = figure(title = 'Renda per capita dos alunos desistentes',plot_width=500, plot_height=700, toolbar_location=None,tools="hover", tooltips="@legenda: @value")
+                        p = figure(title = 'Renda per capita dos alunos desistentes',plot_width=500, plot_height=600, toolbar_location=None,tools="hover", tooltips="@legenda: @value")
                         data = self.data['RENDA_PER_CAPITA_AUFERIDA_FAIXA'].value_counts()
                 elif(self.graf_opt1.value == 'Auxílio'):
-                        p = figure(title = 'Situação de auxílio dos alunos desistentes',plot_width=500, plot_height=700, toolbar_location=None,tools="hover", tooltips="@legenda: @value")
+                        p = figure(title = 'Situação de auxílio dos alunos desistentes',plot_width=500, plot_height=600, toolbar_location=None,tools="hover", tooltips="@legenda: @value")
                         data = self.data['TIPO_AUXILIO'].value_counts()
                 elif(self.graf_opt1.value == 'Situação Emprego'):
-                        p = figure(title = 'Situação de emprego dos alunos desistentes',plot_width=500, plot_height=700, toolbar_location=None,tools="hover", tooltips="@legenda: @value")
+                        p = figure(title = 'Situação de emprego dos alunos desistentes',plot_width=500, plot_height=600, toolbar_location=None,tools="hover", tooltips="@legenda: @value")
                         data = self.data['EMPREGO_SITUACAO'].value_counts()
                 elif(self.graf_opt1.value == 'Situação Moradia'):
-                        p = figure(title = 'Situação de moradia dos alunos desistentes',plot_width=500, plot_height=700, toolbar_location=None,tools="hover", tooltips="@legenda: @value")
+                        p = figure(title = 'Situação de moradia dos alunos desistentes',plot_width=500, plot_height=600, toolbar_location=None,tools="hover", tooltips="@legenda: @value")
                         data = self.data['MORADIA_SITUACAO'].value_counts()
                 else:  
                         p = figure(plot_width=400, plot_height=400)
@@ -51,6 +51,12 @@ class Aba_socioeco:
                 p.y_range.end = 4.5
                 p.legend.location = "top_right"
                 p.axis.visible = False
+                LABELS = data.legenda.to_list()
+                checkbox = CheckboxGroup(labels=LABELS, active=[0, 1])
+                checkbox.js_on_click(CustomJS(code="""
+                        console.log('checkbox_group: active=' + this.active, this.toString())
+                        """))
+                return column(p,checkbox)
                 return p
 
         def grafico1_2(self):
@@ -117,13 +123,13 @@ class Aba_socioeco:
 
         def grafico2_1(self):
                 if(self.graf_opt2.value == 'UF'):
-                        p = figure(title = 'UF_NATURALIDADE',plot_width=500, plot_height=700, toolbar_location=None,tools="hover", tooltips="@legenda: @value")
+                        p = figure(title = 'UF_NATURALIDADE',plot_width=500, plot_height=600, toolbar_location=None,tools="hover", tooltips="@legenda: @value")
                         data = self.data['UF_NATURALIDADE'].value_counts()                        
                 elif(self.graf_opt2.value == 'Nacionalidade'):
-                        p = figure(title = 'NACIONALIADE',plot_width=500, plot_height=700, toolbar_location=None,tools="hover", tooltips="@legenda: @value")
+                        p = figure(title = 'NACIONALIADE',plot_width=500, plot_height=600, toolbar_location=None,tools="hover", tooltips="@legenda: @value")
                         data = self.data['NACIONALIADE'].value_counts()                        
                 else:
-                        p = figure(title = 'NATURALIDADE',plot_width=500, plot_height=700, toolbar_location=None,tools="hover", tooltips="@legenda: @value")
+                        p = figure(title = 'NATURALIDADE',plot_width=500, plot_height=600, toolbar_location=None,tools="hover", tooltips="@legenda: @value")
                         data = self.data['NATURALIDADE'].value_counts()
                 data = data.reset_index(name='value').rename(columns={'index':'legenda'})
                 data['angle'] = data['value']/data['value'].sum() * 2*pi
@@ -140,7 +146,12 @@ class Aba_socioeco:
                 p.x_range.end = 6
                 p.y_range.end = 4.5
                 p.axis.visible = False
-                return p
+                LABELS = data.legenda.to_list()
+                checkbox = CheckboxGroup(labels=LABELS, active=[0, 1])
+                checkbox.js_on_click(CustomJS(code="""
+                        console.log('checkbox_group: active=' + this.active, this.toString())
+                        """))
+                return column(p,checkbox)
                         
                 
         def grafico2_2(self):
@@ -195,13 +206,13 @@ class Aba_socioeco:
 
         def grafico3_1(self):
                 if(self.graf_opt3.value == 'Plano de Estudo'):
-                        p = figure(title = 'Situação de plano de estudo dos alunos desistentes',plot_width=500, plot_height=700, toolbar_location=None,tools="hover", tooltips="@legenda: @value")
+                        p = figure(title = 'Situação de plano de estudo dos alunos desistentes',plot_width=500, plot_height=600, toolbar_location=None,tools="hover", tooltips="@legenda: @value")
                         data = self.data['PLANO_ESTUDO'].value_counts()
                 elif(self.graf_opt3.value == 'Cotista'):
-                        p = figure(title = 'Situação do tipo de cota dos alunos desistentes',plot_width=500, plot_height=700, toolbar_location=None,tools="hover", tooltips="@legenda:  @value")
+                        p = figure(title = 'Situação do tipo de cota dos alunos desistentes',plot_width=500, plot_height=600, toolbar_location=None,tools="hover", tooltips="@legenda:  @value")
                         data = self.data['COTISTA'].value_counts()
                 elif(self.graf_opt3.value == "Tipo de Instituição de 2ø Grau"):
-                        p = figure(title = 'Tipo de instituição de 2ø grau cursada pelos alunos desistentes',plot_width=500, plot_height=700, toolbar_location=None,tools="hover", tooltips="@legenda:  @value")
+                        p = figure(title = 'Tipo de instituição de 2ø grau cursada pelos alunos desistentes',plot_width=500, plot_height=600, toolbar_location=None,tools="hover", tooltips="@legenda:  @value")
                         data = self.data["TIPO_INSTUICAO_SEGUNDO_GRAU"].value_counts()
                 else:  
                         p = figure(plot_width=400, plot_height=400)
@@ -221,7 +232,12 @@ class Aba_socioeco:
                 p.y_range.end = 4.5
                 p.legend.location = "top_right"
                 p.axis.visible = False
-                return p
+                LABELS = data.legenda.to_list()
+                checkbox = CheckboxGroup(labels=LABELS, active=[0, 1])
+                checkbox.js_on_click(CustomJS(code="""
+                        console.log('checkbox_group: active=' + this.active, this.toString())
+                        """))
+                return column(p,checkbox)
 
         def grafico3_2(self):
                 if(self.graf_opt3.value == 'Plano de Estudo'):

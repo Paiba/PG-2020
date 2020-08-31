@@ -6,7 +6,7 @@ import numpy as np
 import matplotlib.patches as mpatches
 from bokeh.plotting import figure, output_file, show
 from bokeh.io import curdoc,output_file, show
-from bokeh.models import ColumnDataSource, Grid, HBar, LinearAxis, Plot, HoverTool,BoxSelectTool, Panel, Tabs, Select, FactorRange
+from bokeh.models import ColumnDataSource, Grid, HBar, LinearAxis, Plot, HoverTool,BoxSelectTool, Panel, Tabs, Select, FactorRange, Legend, LegendItem
 from bokeh.layouts import layout, row, column
 from bokeh.palettes import Paired12
 from bokeh.transform import factor_cmap
@@ -83,9 +83,9 @@ class Aba_geral:
                 #for col in data_ufes.columns: 
                 #       print(col) 
 
-                slope = [self.inep['TDA'].mean()]*len(self.inep['NO_CURSO']) #Média Total
-                slope_es = [data_es['TDA'].mean()]*len(self.inep['NO_CURSO']) #Média ES
-                slope_ufes = [data_ufes['TDA'].mean()]*len(self.inep['NO_CURSO']) #Média UFES
+                slope = [self.inep['TDA'].mean()]*len(data_ufes['NO_CURSO']) #Média Total
+                slope_es = [data_es['TDA'].mean()]*len(data_ufes['NO_CURSO']) #Média ES
+                slope_ufes = [data_ufes['TDA'].mean()]*len(data_ufes['NO_CURSO']) #Média UFES
 
                 
                 cursos = data_brasil['NO_CURSO'].unique()
@@ -104,20 +104,25 @@ class Aba_geral:
                 p = figure(x_range=FactorRange(*x), plot_width=1400, plot_height=400, title='Taxa de Desistência Acumulada: Turmas ingressantes em 2010', toolbar_location=None, tools="")
                 renderer = p.vbar(x='x', top='counts', width=0.9, source=source, line_color="white",
                 fill_color=factor_cmap('x', palette=["lightblue","pink"], factors=medias, start=1, end=2))
-                p.add_tools(HoverTool(tooltips=[("Taxa de Desistência Acumulada","@counts"),("Nome do Curso, Local","@x")],mode = "mouse",renderers=[renderer]))
+                p.add_tools(HoverTool(tooltips=[("Taxa de Desistência Acumulada","@counts{1.1}%"),("Nome do Curso, Local","@x")],mode = "mouse",renderers=[renderer]))
 
                 renderer_media1= p.line(x=data_ufes['NO_CURSO'], y=slope,line_color='black', line_width =2)                
-                p.add_tools(HoverTool(tooltips = [("Média Taxa de desistência acumulada (Brasil)",'@y')],mode='mouse', renderers=[renderer_media1]))
+                p.add_tools(HoverTool(tooltips = [("Média Taxa de desistência acumulada (Brasil)",'@y{1.1}%')],mode='mouse', renderers=[renderer_media1]))
 
                 renderer_media2= p.line(x=data_ufes['NO_CURSO'], y=slope_es,line_color='black', line_width =2)                
-                p.add_tools(HoverTool(tooltips = [("Média Taxa de desistência acumulada (ES)",'@y')],mode='mouse', renderers=[renderer_media2]))
+                p.add_tools(HoverTool(tooltips = [("Média Taxa de desistência acumulada (ES)",'@y{1.1}%')],mode='mouse', renderers=[renderer_media2]))
 
                 renderer_media3= p.line(x=data_ufes['NO_CURSO'], y=slope_ufes,line_color='black', line_width =2)                
-                p.add_tools(HoverTool(tooltips = [("Média Taxa de desistência acumulada (UFES)",'@y')],mode='mouse', renderers=[renderer_media3]))
+                p.add_tools(HoverTool(tooltips = [("Média Taxa de desistência acumulada (UFES)",'@y{1.1}%')],mode='mouse', renderers=[renderer_media3]))
                 p.y_range.start = 0
-
+                p.y_range.end = 110
+                p.yaxis.axis_label = "Taxa de desistência acumulada (%)"
                 p.xaxis.visible = False
-                
+                legend = Legend(items=[
+                        LegendItem(label="BRASIL", renderers=[renderer], index=0),
+                        LegendItem(label="UFES", renderers=[renderer], index=1),
+                        ])
+                p.add_layout(legend)
                 return p
 
 

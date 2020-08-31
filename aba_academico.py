@@ -93,7 +93,7 @@ class Aba_academico:
 
         #Frequência de presença de alunos desistentes
         def grafico3(self):
-                titulo = "Frequência dos Alunos que Evadiram"
+                titulo = "Frequência da Presença em Aula dos Alunos Desistentes"
                 if(self.curso_rep.value=="Todos"):
                         data = self.data
                 else:

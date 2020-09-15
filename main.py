@@ -122,11 +122,18 @@ def Main():
         
         tabela_simplifica_aluno = tabela_refinada_aluno
         
-        nome_evasao = ['Desistência','Desligamento: Resolução 68/2017-CEPE','Desligamento por Abandono','Desligamento: Descumpriu Plano de Estudos','Reopção de curso','Adaptação Curricular','Transferido','Desligamento: 3 reprovações em 1 disciplina','Transferência Interna', 'Reopção de Curso','Não Informado' , 'Jubilado', 'Desligamento por mandado judicial' ,'Conclusão de Aluno Especial', 'Falecimento' ,'Matricula desativada', 'Nulidade da matrícula - ato administrativo'] #Grupo de diferentes nomenclaturas de evasão
-        
+        nome_evasao = ['Desistência','Desligamento: Resolução 68/2017-CEPE','Desligamento por Abandono',
+        'Desligamento: Descumpriu Plano de Estudos','Reopção de curso','Transferido','Desligamento: 3 reprovações em 1 disciplina',
+        'Transferência Interna', 'Reopção de Curso','Jubilado', 'Desligamento por mandado judicial','Falecimento' ,'Matricula desativada', 
+        'Sansão Disciplinar','Cancelamento Convênio'] #Grupo de diferentes nomenclaturas de evasão
+        nome_formado = ['Formado']
+        nome_semevasao = ['Sem evasão','Adaptação Curricular']
+        nome_indefinido = ['Nulidade da matrícula - ato administrativo','Erro de cadastro','Não Informado', 'Conclusão de Aluno Especial']
+
         tabela_simplifica_aluno['FORMA_EVASAO'] = tabela_refinada_aluno['FORMA_EVASAO'].replace(nome_evasao, 'Insucesso acadêmico') #Mudando diversas nomenclaturas de evasão para evadiu
-      
-        
+        tabela_simplifica_aluno['FORMA_EVASAO'] = tabela_refinada_aluno['FORMA_EVASAO'].replace(nome_formado, 'Formado')
+        tabela_simplifica_aluno['FORMA_EVASAO'] = tabela_refinada_aluno['FORMA_EVASAO'].replace(nome_semevasao, 'Sem Evasão')
+        tabela_simplifica_aluno['FORMA_EVASAO'] = tabela_refinada_aluno['FORMA_EVASAO'].replace(nome_indefinido, 'Indefinido')
         #CONSTRUÇÃO DA TABELA DE DISCIPLINAS E CURSOS
         tabela_refinada_disciplinas = tabela_bruta.filter(['NOME_CURSO','NOME_DISCIPLINA','MEDIA_FINAL','SITUACAO_DISCIPLINA','ANO_DISCIPLINA', 'SEMESTRE_DISCIPLINA'])
         

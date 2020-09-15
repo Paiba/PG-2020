@@ -40,6 +40,8 @@ class Aba_geral:
                         p.hbar(y= 'legenda', height =0.4 , right = 'value', source = data)
                 else:
                         p=figure(plot_width=700, plot_height=300, title = "Situação dos alunos",toolbar_location=None)
+                p.yaxis.axis_label = "Situação do Aluno"
+                p.xaxis.axis_label = "Quantidade de Alunos"
                 return p
 
         def grafico2(self):
@@ -64,6 +66,8 @@ class Aba_geral:
                         p.hbar(y= 'legenda', height =0.4 , right = 'value', source = data)
                 else:
                         p=figure(plot_width=500, plot_height=300, title = "bla", toolbar_location=None)
+                p.yaxis.axis_label = "Curso"
+                p.xaxis.axis_label = "Quantidade de Alunos"
                 return p
 
         
@@ -117,6 +121,7 @@ class Aba_geral:
                 p.y_range.start = 0
                 p.y_range.end = 110
                 p.yaxis.axis_label = "Taxa de desistência acumulada (%)"
+                p.xaxis.axis_label = "Cursos"
                 p.xaxis.visible = False
                 legend = Legend(items=[
                         LegendItem(label="BRASIL", renderers=[renderer], index=0),

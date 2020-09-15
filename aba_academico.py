@@ -88,7 +88,8 @@ class Aba_academico:
                 rendimento.xaxis.major_label_overrides = {1: 'Menor que 5', 2: 'Entre 5 e 7', 3: 'Maior que 7'}
                 rendimento.y_range.start = 0
                 rendimento.y_range.end = max(cr)+max(cr)*0.1
-                rendimento.yaxis.visible = False
+                rendimento.xaxis.axis_label = "Faixa de Coeficiente de Rendimento"
+                rendimento.yaxis.axis_label = "Quantidade de Alunos"
                 return rendimento
 
         #Frequência de presença de alunos desistentes

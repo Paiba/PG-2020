@@ -54,7 +54,7 @@ class Aba_disciplina:
                 reprovados['Total'] = qtd_aluno['SITUACAO_DISCIPLINA']
                 reprovados = reprovados.loc[reprovados['Total']>10]
                 reprovados.rename(columns={'SITUACAO_DISCIPLINA':'REPROVADOS'}, inplace=True)
-                reprovados['TUPLA'] = list(reprovados.NOME_CURSO+" "+reprovados.NOME_DISCIPLINA)
+                reprovados['TUPLA'] = list(reprovados.NOME_CURSO+" / "+reprovados.NOME_DISCIPLINA)
                 
                 #Top 5 matérias com mais reprovações
                 def cria_graf():
@@ -84,7 +84,10 @@ toolbar_location=None,tools="hover", tooltips="Índice de Reprovação : @PORCEN
                                 p.hbar(y= 'TUPLA', height =0.4 , right = 'PORCENTAGEM_REP',left = 0, source = data)
                         p.x_range.start = -0.1
                         p.x_range.end = 100
+                        p.xaxis.axis_label = "Porcentagem de Reprovação"
+                        p.yaxis.axis_label = "Curso/Disciplina"
                         return p
+                        
 
                 aba_completa = row(cria_graf(),column(curso_opcao,indice_opcao, top_slider))
 

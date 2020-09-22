@@ -17,25 +17,49 @@ class Aba_geral:
         def grafico1(self):
                 #SITUACÃO DOS ALUNOS
                 data=[]
+                #Ano de Ingresso
                 if(self.ano_ing_opcao.value == 'Todos'):
                        data = self.alunos_por_ano
                        part_titulo = ""
                 else:
                        data = self.alunos_por_ano.loc[self.alunos_por_ano['ANO_INGRESSO'] == self.ano_ing_opcao.value]
                        part_titulo = " (Ingressantes de "+ self.ano_ing_opcao.value+")"
-
+                #Curso
                 if(self.curso_opt.value == 'Todos'):
                        titulo = "Situação dos alunos da UFES "+part_titulo
                 else:
                        data = data.loc[data['NOME_CURSO'] == self.curso_opt.value]
                        titulo = "Situação dos alunos da UFES do curso "+self.curso_opt.value+part_titulo
-                
+                #Renda per Capita
+                if(self.renda_opt.value == 'Todos'):
+                        pass
+                else:
+                       data = data.loc[data['RENDA_PER_CAPITA_AUFERIDA_FAIXA'] == self.renda_opt.value]
+
+                #Naturalidade
+                if(self.natu_opt.value == 'Todos'):
+                        pass
+                else:
+                       data = data.loc[data['NATURALIDADE'] == self.natu_opt.value]
+
+                #Instituição do Segundo Grau
+                if(self.insti2_opt.value == 'Todos'):
+                        pass
+                else:
+                       data = data.loc[data['TIPO_INSTUICAO_SEGUNDO_GRAU'] == self.insti2_opt.value]
+
+                #Cotas
+                if(self.cota_opt.value == 'Todos'):
+                        pass
+                else:
+                       data = data.loc[data['COTISTA'] == self.cota_opt.value]
+
                 if not data.empty:
                         data = data['FORMA_EVASAO'].value_counts()
                         data = data.reset_index(name='value').rename(columns={'index':'legenda'})
                         data = data.sort_values('value', ascending=True)
                         data['porc'] = (data['value']/data['value'].sum())*100
-                        p = figure(y_range = data.legenda, plot_width=700, plot_height=300, title = titulo,toolbar_location=None,
+                        p = figure(y_range = data.legenda, plot_width=850, plot_height=300, title = titulo,toolbar_location=None,
                                 tooltips=[("Alunos","@value"),("%","@porc{1.1}%")] )
                         p.hbar(y= 'legenda', height =0.4 , right = 'value', source = data)
                 else:
@@ -61,7 +85,7 @@ class Aba_geral:
                         elif(self.maiormenor.value == 'Menor'):
                                 data = data.tail(15)
                                 titulo = "15 cursos com MENOR quantidade de alunos em situação: "+self.situacao_opt.value
-                        p = figure(y_range = data.legenda, plot_width=700, plot_height=300, title = titulo ,toolbar_location=None,
+                        p = figure(y_range = data.legenda, plot_width=850, plot_height=300, title = titulo ,toolbar_location=None,
                                 tooltips=[("Alunos", "@value")] )
                         p.hbar(y= 'legenda', height =0.4 , right = 'value', source = data)
                 else:
@@ -105,7 +129,7 @@ class Aba_geral:
                 source = ColumnDataSource(data=dict(x=x, counts=counts))
 
 
-                p = figure(x_range=FactorRange(*x), plot_width=1400, plot_height=400, title='Taxa de Desistência Acumulada: Turmas ingressantes em 2010', toolbar_location=None, tools="")
+                p = figure(x_range=FactorRange(*x), plot_width=1700, plot_height=1000, title='Taxa de Desistência Acumulada: Turmas ingressantes em 2010', toolbar_location=None, tools="")
                 renderer = p.vbar(x='x', top='counts', width=0.9, source=source, line_color="white",
                 fill_color=factor_cmap('x', palette=["lightblue","pink"], factors=medias, start=1, end=2))
                 p.add_tools(HoverTool(tooltips=[("Taxa de Desistência Acumulada","@counts{1.1}%"),("Nome do Curso, Local","@x")],mode = "mouse",renderers=[renderer]))
@@ -113,20 +137,24 @@ class Aba_geral:
                 renderer_media1= p.line(x=data_ufes['NO_CURSO'], y=slope,line_color='black', line_width =2)                
                 p.add_tools(HoverTool(tooltips = [("Média Taxa de desistência acumulada (Brasil)",'@y{1.1}%')],mode='mouse', renderers=[renderer_media1]))
 
-                renderer_media2= p.line(x=data_ufes['NO_CURSO'], y=slope_es,line_color='black', line_width =2)                
+                renderer_media2= p.line(x=data_ufes['NO_CURSO'], y=slope_es,line_color='red', line_width =2)                
                 p.add_tools(HoverTool(tooltips = [("Média Taxa de desistência acumulada (ES)",'@y{1.1}%')],mode='mouse', renderers=[renderer_media2]))
 
-                renderer_media3= p.line(x=data_ufes['NO_CURSO'], y=slope_ufes,line_color='black', line_width =2)                
+                renderer_media3= p.line(x=data_ufes['NO_CURSO'], y=slope_ufes,line_color='orange', line_width =2)                
                 p.add_tools(HoverTool(tooltips = [("Média Taxa de desistência acumulada (UFES)",'@y{1.1}%')],mode='mouse', renderers=[renderer_media3]))
                 p.y_range.start = 0
-                p.y_range.end = 110
+                p.y_range.end = 120
                 p.yaxis.axis_label = "Taxa de desistência acumulada (%)"
                 p.xaxis.axis_label = "Cursos"
-                p.xaxis.visible = False
+                p.xaxis.major_label_orientation = pi/2
+                p.xaxis.group_label_orientation = pi/2
                 legend = Legend(items=[
                         LegendItem(label="BRASIL", renderers=[renderer], index=0),
                         LegendItem(label="UFES", renderers=[renderer], index=1),
-                        ])
+                        LegendItem(label="Média Nacional", renderers=[renderer_media1], index=2),
+                        LegendItem(label="Média ES", renderers=[renderer_media2], index=3),
+                        LegendItem(label="Média da UFES", renderers=[renderer_media3], index=4)
+                        ])                       
                 p.add_layout(legend)
                 return p
 
@@ -140,7 +168,7 @@ class Aba_geral:
                 def update2(attr, old, new):
                         situ2.children[0] = self.grafico2()
 
-                self.alunos_por_ano = dados.filter(['ANO_INGRESSO','FORMA_EVASAO','MEDIA_FINAL', 'NOME_CURSO'])
+                self.alunos_por_ano = dados.filter(['ANO_INGRESSO','FORMA_EVASAO','MEDIA_FINAL', 'NOME_CURSO', 'RENDA_PER_CAPITA_AUFERIDA_FAIXA','NATURALIDADE','COTISTA','TIPO_INSTUICAO_SEGUNDO_GRAU'])
                 self.alunos_por_ano = self.alunos_por_ano.fillna(0)
                 self.alunos_por_ano.ANO_INGRESSO = self.alunos_por_ano.ANO_INGRESSO.astype(str)
 
@@ -156,6 +184,30 @@ class Aba_geral:
                 self.curso_opt = Select(title = 'Curso', value = 'Todos', options = nome_cursos.tolist() )
                 self.curso_opt.on_change('value', update1)
 
+                #Seleção de Renda no gráfico 1
+                nome_renda = self.alunos_por_ano['RENDA_PER_CAPITA_AUFERIDA_FAIXA'].unique()
+                nome_renda = np.append(nome_renda, "Todos")
+                self.renda_opt = Select(title = 'Renda per Capita Auferida', value = 'Todos', options = nome_renda.tolist() )
+                self.renda_opt.on_change('value', update1)
+                
+                #Seleção de Naturalidade no gráfico 1
+                nome_natu = self.alunos_por_ano['NATURALIDADE'].unique()
+                nome_natu = np.append(nome_natu, "Todos")
+                self.natu_opt = Select(title = 'Naturalidade', value = 'Todos', options = nome_natu.tolist() )
+                self.natu_opt.on_change('value', update1)
+                
+                #Seleção de Cotas no gráfico 1
+                tipo_cota = self.alunos_por_ano['COTISTA'].unique()
+                tipo_cota = np.append(tipo_cota, "Todos")
+                self.cota_opt = Select(title = 'Tipo Cota', value = 'Todos', options = tipo_cota.tolist() )
+                self.cota_opt.on_change('value', update1)
+
+                #Seleção de Instituicao de 2o grau no gráfico 1
+                insti2grau = self.alunos_por_ano['TIPO_INSTUICAO_SEGUNDO_GRAU'].unique()
+                insti2grau = np.append(insti2grau, "Todos")
+                self.insti2_opt = Select(title = 'Instituição de 2o Grau', value = 'Todos', options = insti2grau.tolist() )
+                self.insti2_opt.on_change('value', update1)
+                
                 #Seleção de forma de evasão gráfico 2
                 nome_situacao = self.alunos_por_ano['FORMA_EVASAO'].unique()
                 self.situacao_opt = Select(title = 'Situação do Aluno', value = 'Insucesso acadêmico', options = nome_situacao.tolist() )
@@ -166,7 +218,9 @@ class Aba_geral:
                 self.maiormenor.on_change('value', update2)
 
                 #Disposição dos elementos na aba
-                situ1 = column(self.grafico1(), self.ano_ing_opcao, self.curso_opt)
+                situ1 = column(self.grafico1(), row(column(self.ano_ing_opcao, self.curso_opt),
+                                        column(self.renda_opt,self.natu_opt),
+                                        column(self.cota_opt,self.insti2_opt)))
                 situ2 =  column(self.grafico2(), self.situacao_opt, self.maiormenor)
                 aba_completa = column(row(situ1,situ2), self.grafico3())
                 

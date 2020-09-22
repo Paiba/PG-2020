@@ -214,6 +214,9 @@ class Aba_socioeco:
                 elif(self.graf_opt3.value == "Tipo de Instituição de 2ø Grau"):
                         p = figure(title = 'Tipo de instituição de 2ø grau cursada pelos alunos desistentes',plot_width=500, plot_height=600, toolbar_location=None,tools="hover", tooltips="@legenda:  @value")
                         data = self.data["TIPO_INSTUICAO_SEGUNDO_GRAU"].value_counts()
+                elif(self.graf_opt3.value == 'Forma de Ingresso'):
+                        p = figure(title = 'Forma de ingresso dos alunos desistentes',plot_width=500, plot_height=600, toolbar_location=None,tools="hover", tooltips="@legenda:  @value")
+                        data = self.data["FORMA_INGRESSO"].value_counts()
                 else:  
                         p = figure(plot_width=400, plot_height=400)
 
@@ -273,6 +276,18 @@ class Aba_socioeco:
                                 data_aux =  data_aux.append(linha_extra, ignore_index = True)
                                 data = data_aux 
                         p = figure(x_range = data.legenda,title = 'Tipo de instituição de 2ø grau cursada pelos alunos desistentes',plot_width=500, plot_height=700, toolbar_location=None,tools="hover", tooltips="@legenda:  @value")
+                
+                elif(self.graf_opt3.value == 'Forma de Ingresso'):
+                        legenda = self.data["FORMA_INGRESSO"].unique()
+                        data = self.data["FORMA_INGRESSO"].value_counts()
+                        data = data.reset_index(name='value').rename(columns={'index':'legenda'})
+                        if(len(data.value) > 5):
+                                data_aux = data.head()
+                                linha_extra = {'legenda':'Outros','value':data.value[5:].sum()}
+                                data_aux =  data_aux.append(linha_extra, ignore_index = True)
+                                data = data_aux 
+                        p = figure(x_range = data.legenda,title = 'Forma de ingresso dos alunos desistentes',plot_width=500, plot_height=700, toolbar_location=None,tools="hover", tooltips="@legenda:  @value")
+
                 else:  
                         p = figure(plot_width=400, plot_height=400) 
 
@@ -327,7 +342,7 @@ class Aba_socioeco:
                 #######################################################################
                 
                 #Seletor de índices geograficos
-                self.graf_opt3 = Select(title = 'Fator Acadêmico', value = 'Cotista', options = ["Cotista","Plano de Estudo", "Tipo de Instituição de 2ø Grau"] )
+                self.graf_opt3 = Select(title = 'Fator Acadêmico', value = 'Cotista', options = ["Cotista","Plano de Estudo", "Tipo de Instituição de 2ø Grau", "Forma de Ingresso"] )
                 self.graf_opt3.on_change('value', update3)
                 
                 #Seletor de modo de exibição do gráfico 2

@@ -59,11 +59,11 @@ class Aba_geral:
                         data = data.reset_index(name='value').rename(columns={'index':'legenda'})
                         data = data.sort_values('value', ascending=True)
                         data['porc'] = (data['value']/data['value'].sum())*100
-                        p = figure(y_range = data.legenda, plot_width=850, plot_height=300, title = titulo,toolbar_location=None,
+                        p = figure(y_range = data.legenda, plot_width=1000, plot_height=400, title = titulo,toolbar_location=None,
                                 tooltips=[("Alunos","@value"),("%","@porc{1.1}%")] )
                         p.hbar(y= 'legenda', height =0.4 , right = 'value', source = data)
                 else:
-                        p=figure(plot_width=700, plot_height=300, title = "Situação dos alunos",toolbar_location=None)
+                        p=figure(plot_width=1000, plot_height=400, title = "Situação dos alunos",toolbar_location=None)
                 p.yaxis.axis_label = "Situação do Aluno"
                 p.xaxis.axis_label = "Quantidade de Alunos"
                 return p
@@ -85,83 +85,21 @@ class Aba_geral:
                         elif(self.maiormenor.value == 'Menor'):
                                 data = data.tail(15)
                                 titulo = "15 cursos com MENOR quantidade de alunos em situação: "+self.situacao_opt.value
-                        p = figure(y_range = data.legenda, plot_width=850, plot_height=300, title = titulo ,toolbar_location=None,
+                        p = figure(y_range = data.legenda, plot_width=1000, plot_height=400, title = titulo ,toolbar_location=None,
                                 tooltips=[("Alunos", "@value")] )
                         p.hbar(y= 'legenda', height =0.4 , right = 'value', source = data)
                 else:
-                        p=figure(plot_width=500, plot_height=300, title = "bla", toolbar_location=None)
+                        p=figure(plot_width=1000, plot_height=400, title = "bla", toolbar_location=None)
                 p.yaxis.axis_label = "Curso"
                 p.xaxis.axis_label = "Quantidade de Alunos"
                 return p
 
         
-        def grafico3(self):
+        
+
+
+        def __init__(self, dados):
                 
-
-                data_ufes = self.inep.loc[self.inep['NO_IES'] == "UNIVERSIDADE FEDERAL DO ESPÍRITO SANTO"]
-                data_ufes = data_ufes.groupby('NO_CURSO').mean().reset_index()
-                
-
-                data_brasil = self.inep.groupby('NO_CURSO').mean().reset_index()
-                data_brasil = data_brasil.loc[data_brasil['NO_CURSO'].isin(data_ufes['NO_CURSO'].unique())].reset_index()
-
-                data_ufes['MEDIA_TDA_BR'] = data_brasil['TDA']
-                data_es = self.inep.loc[self.inep['CO_UF'] == 32]
-
-                #for col in data_ufes.columns: 
-                #       print(col) 
-
-                slope = [self.inep['TDA'].mean()]*len(data_ufes['NO_CURSO']) #Média Total
-                slope_es = [data_es['TDA'].mean()]*len(data_ufes['NO_CURSO']) #Média ES
-                slope_ufes = [data_ufes['TDA'].mean()]*len(data_ufes['NO_CURSO']) #Média UFES
-
-                
-                cursos = data_brasil['NO_CURSO'].unique()
-                medias =  ['BRASIL','UFES']
-
-                data = { 'cursos' : cursos, 
-                'MEDIA_TDA_BR': data_ufes['MEDIA_TDA_BR'], 
-                'TDA': data_ufes['TDA']}
-                
-                x = [(curso, local) for curso in cursos for local in medias]
-                counts = sum(zip(data['MEDIA_TDA_BR'],data['TDA']),())
-
-                source = ColumnDataSource(data=dict(x=x, counts=counts))
-
-
-                p = figure(x_range=FactorRange(*x), plot_width=1700, plot_height=1000, title='Taxa de Desistência Acumulada: Turmas ingressantes em 2010', toolbar_location=None, tools="")
-                renderer = p.vbar(x='x', top='counts', width=0.9, source=source, line_color="white",
-                fill_color=factor_cmap('x', palette=["lightblue","pink"], factors=medias, start=1, end=2))
-                p.add_tools(HoverTool(tooltips=[("Taxa de Desistência Acumulada","@counts{1.1}%"),("Nome do Curso, Local","@x")],mode = "mouse",renderers=[renderer]))
-
-                renderer_media1= p.line(x=data_ufes['NO_CURSO'], y=slope,line_color='black', line_width =2)                
-                p.add_tools(HoverTool(tooltips = [("Média Taxa de desistência acumulada (Brasil)",'@y{1.1}%')],mode='mouse', renderers=[renderer_media1]))
-
-                renderer_media2= p.line(x=data_ufes['NO_CURSO'], y=slope_es,line_color='red', line_width =2)                
-                p.add_tools(HoverTool(tooltips = [("Média Taxa de desistência acumulada (ES)",'@y{1.1}%')],mode='mouse', renderers=[renderer_media2]))
-
-                renderer_media3= p.line(x=data_ufes['NO_CURSO'], y=slope_ufes,line_color='orange', line_width =2)                
-                p.add_tools(HoverTool(tooltips = [("Média Taxa de desistência acumulada (UFES)",'@y{1.1}%')],mode='mouse', renderers=[renderer_media3]))
-                p.y_range.start = 0
-                p.y_range.end = 120
-                p.yaxis.axis_label = "Taxa de desistência acumulada (%)"
-                p.xaxis.axis_label = "Cursos"
-                p.xaxis.major_label_orientation = pi/2
-                p.xaxis.group_label_orientation = pi/2
-                legend = Legend(items=[
-                        LegendItem(label="BRASIL", renderers=[renderer], index=0),
-                        LegendItem(label="UFES", renderers=[renderer], index=1),
-                        LegendItem(label="Média Nacional", renderers=[renderer_media1], index=2),
-                        LegendItem(label="Média ES", renderers=[renderer_media2], index=3),
-                        LegendItem(label="Média da UFES", renderers=[renderer_media3], index=4)
-                        ])                       
-                p.add_layout(legend)
-                return p
-
-
-        def __init__(self, dados, inep):
-                self.inep = inep.groupby(['NO_IES','CO_CURSO']).max().reset_index()
-                self.inep['CO_CURSO'] = self.inep['CO_CURSO'].astype(str)
 
                 def update1(attr, old, new):
                         situ1.children[0] = self.grafico1()
@@ -218,11 +156,10 @@ class Aba_geral:
                 self.maiormenor.on_change('value', update2)
 
                 #Disposição dos elementos na aba
-                situ1 = column(self.grafico1(), row(column(self.ano_ing_opcao, self.curso_opt),
-                                        column(self.renda_opt,self.natu_opt),
-                                        column(self.cota_opt,self.insti2_opt)))
-                situ2 =  column(self.grafico2(), self.situacao_opt, self.maiormenor)
-                aba_completa = column(row(situ1,situ2), self.grafico3())
+                situ1 = row(self.grafico1(),column(self.ano_ing_opcao, self.curso_opt,self.cota_opt),
+                                        column(self.renda_opt,self.natu_opt,self.insti2_opt))
+                situ2 =  row(self.grafico2(), column(self.situacao_opt, self.maiormenor))
+                aba_completa = column(situ1,situ2)
                 
                 self.aba =  aba_completa
                 ################## GRÁFICOS DA PRIMEIRA ABA ###############################

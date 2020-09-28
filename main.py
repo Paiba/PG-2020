@@ -16,7 +16,6 @@ from bokeh.io import curdoc,output_file, show
 from bokeh.models import ColumnDataSource, Grid, HBar, LinearAxis, Plot, HoverTool,BoxSelectTool, Panel, Tabs, CheckboxGroup
 from bokeh.models.widgets import FileInput
 from bokeh.layouts import layout,row, column, Spacer
-from bokeh.palettes import Paired12
 from bokeh.transform import factor_cmap
 from bokeh.transform import cumsum
 from math import pi
@@ -27,6 +26,7 @@ from aba_geral import Aba_geral
 from aba_academico import Aba_academico
 from aba_socioeco import Aba_socioeco
 from aba_disciplina import Aba_disciplina
+from aba_inep import Aba_inep
 
 def Main():
 
@@ -134,6 +134,7 @@ def Main():
         tabela_simplifica_aluno['FORMA_EVASAO'] = tabela_refinada_aluno['FORMA_EVASAO'].replace(nome_formado, 'Formado')
         tabela_simplifica_aluno['FORMA_EVASAO'] = tabela_refinada_aluno['FORMA_EVASAO'].replace(nome_semevasao, 'Sem Evasão')
         tabela_simplifica_aluno['FORMA_EVASAO'] = tabela_refinada_aluno['FORMA_EVASAO'].replace(nome_indefinido, 'Indefinido')
+        tabela_simplifica_aluno = tabela_simplifica_aluno[tabela_simplifica_aluno.FORMA_EVASAO != 'Indefinido']
         #CONSTRUÇÃO DA TABELA DE DISCIPLINAS E CURSOS
         tabela_refinada_disciplinas = tabela_bruta.filter(['NOME_CURSO','NOME_DISCIPLINA','MEDIA_FINAL','SITUACAO_DISCIPLINA','ANO_DISCIPLINA', 'SEMESTRE_DISCIPLINA'])
         
@@ -146,14 +147,19 @@ def Main():
         SOCIOECO = Aba_socioeco(tabela_simplifica_aluno)
         SOCIOECO = Panel(child = SOCIOECO.aba, title ="Situação Socioeconômica")
         
+        INEP = Aba_inep(tabela_inep)
+        INEP = Panel(child = INEP.aba, title = "INEP")
+
+        SITUACAO = Aba_geral(tabela_simplifica_aluno)
+        SITUACAO = Panel(child = SITUACAO.aba, title = "Situação dos Alunos da UFES")
         ########### Classe de cada aba ####################
-        SITUACAO = Aba_geral(tabela_simplifica_aluno, tabela_inep)        
+        GERAL = Tabs(tabs = [SITUACAO, INEP])        
         DISCIPLINA = Aba_disciplina(tabela_refinada_disciplinas)
         ALUNOS = Tabs(tabs = [ACADEMICO, SOCIOECO])
        
 
         ########### Layout de cada aba ####################
-        aba_geral = SITUACAO.aba
+        aba_geral = layout([GERAL])
         aba_alunos = layout([ALUNOS])
         aba_disc = DISCIPLINA.aba
         
@@ -162,8 +168,6 @@ def Main():
         alunos= Panel(child = aba_alunos, title="Análise de Alunos Desistentes")
         #geografico = Panel(child = aba_geog, title="Informações Geográficas")
         discipli = Panel(child = aba_disc, title="Disciplinas dos Cursos")
-
-     
         
         
         tabs = Tabs(tabs=[geral, alunos, discipli])

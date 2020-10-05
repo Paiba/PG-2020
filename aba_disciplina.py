@@ -6,7 +6,7 @@ import numpy as np
 
 from bokeh.plotting import curdoc,figure, output_file, show
 from bokeh.io import curdoc,output_file, show
-from bokeh.models import ColumnDataSource, Grid, HBar, LinearAxis, Plot, HoverTool,BoxSelectTool, Panel, Tabs, CheckboxGroup, Range1d, Select, RadioGroup, Slider, CustomJS
+from bokeh.models import ColumnDataSource, Grid, HBar, LinearAxis, Plot, HoverTool,BoxSelectTool, Panel, Tabs, CheckboxGroup, Range1d, Select, RadioGroup, Slider, CustomJS, Legend, LegendItem
 from bokeh.layouts import layout,row, column, Spacer
 from bokeh.palettes import Paired12
 from bokeh.transform import factor_cmap
@@ -56,6 +56,7 @@ class Aba_disciplina:
                 reprovados.rename(columns={'SITUACAO_DISCIPLINA':'REPROVADOS'}, inplace=True)
                 reprovados['TUPLA'] = list(reprovados.NOME_CURSO+" / "+reprovados.NOME_DISCIPLINA)
                 
+                
                 #Top 5 matérias com mais reprovações
                 def cria_graf():
                         decresc = False
@@ -72,27 +73,39 @@ class Aba_disciplina:
                         if(curso_opcao.value == 'UFES'):
                                 data = reprovados.sort_values(by ='PORCENTAGEM_REP', ascending = decresc ).head(top_slider.value)
                                 data = data.sort_values(by ='PORCENTAGEM_REP', ascending = True )
+                                slope = [reprovados['PORCENTAGEM_REP'].mean()]*top_slider.value
                                 p = figure(title = titulo+' Índices de Reprovação na UFES',y_range = data.TUPLA, plot_width=1200, plot_height=800,
 toolbar_location=None,tools="hover", tooltips="Índice de Reprovação : @PORCENTAGEM_REP %")
                                 p.hbar(y= 'TUPLA', height =0.4, right = 'PORCENTAGEM_REP',left=0, source = data)
+                                renderer_slope= p.line(x=slope,y=data['TUPLA'],line_color='red', line_width =2)
+                                legend = Legend(items=[LegendItem(label="Média de Reprovações da UFES", renderers=[renderer_slope])],location=(0, 600))                      
+                                p.add_layout(legend,"right")
+
 
                         else:
                                 data = reprovados.loc[reprovados['NOME_CURSO']==curso_opcao.value]
                                 slope_esp = [data['PORCENTAGEM_REP'].mean()]*top_slider.value
+                                slope = [reprovados['PORCENTAGEM_REP'].mean()]*top_slider.value
                                 data = data.sort_values(by ='PORCENTAGEM_REP',  ascending = decresc ).head(top_slider.value)
                                 data = data.sort_values(by ='PORCENTAGEM_REP', ascending = True )
                                 p = figure(title = titulo+' Índices de Reprovação no curso '+curso_opcao.value,y_range = data.TUPLA, plot_width=1200, plot_height=800, toolbar_location=None,tools="hover", tooltips="Índice de Reprovação : @PORCENTAGEM_REP %")
                                 p.hbar(y= 'TUPLA', height =0.4 , right = 'PORCENTAGEM_REP',left = 0, source = data)
+                                renderer_slope= p.line(x=slope,y=data['TUPLA'],line_color='red', line_width =2)
                                 renderer_slope_esp = p.line(x=slope_esp,y=data['TUPLA'],line_color='green', line_width =2)                
                                 p.add_tools(HoverTool(tooltips = [("Média Porcentagem de Reprovação da Disciplina",'@x{1.1}%')],mode='mouse', renderers=[renderer_slope_esp]))
+                                legend = Legend(items=[
+                                        LegendItem(label="Média de Reprovações da UFES", renderers=[renderer_slope], index=0),
+                                        LegendItem(label="Média de Reprovações do Curso", renderers=[renderer_slope_esp], index=1)
+                                        ],location=(0,600))                      
+                                p.add_layout(legend, "right")
 
-                        slope = [reprovados['PORCENTAGEM_REP'].mean()]*top_slider.value
-                        renderer_slope= p.line(x=slope,y=data['TUPLA'],line_color='red', line_width =2)                
+                                        
                         p.add_tools(HoverTool(tooltips = [("Média Porcentagem de Reprovação da UFES",'@x{1.1}%')],mode='mouse', renderers=[renderer_slope]))
                         p.x_range.start = -0.1
                         p.x_range.end = 100
                         p.xaxis.axis_label = "Porcentagem de Reprovação"
                         p.yaxis.axis_label = "Curso/Disciplina"
+                        
                         return p
                         
 

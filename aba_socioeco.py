@@ -51,13 +51,12 @@ class Aba_socioeco:
                 p.y_range.end = 4.5
                 p.legend.location = "top_right"
                 p.axis.visible = False
-                LABELS = data.legenda.to_list()
+                '''LABELS = data.legenda.to_list()
                 checkbox = CheckboxGroup(labels=LABELS, active=[0, 1])
                 checkbox.js_on_click(CustomJS(code="""
                         console.log('checkbox_group: active=' + this.active, this.toString())
-                        """))
-                return column(p,checkbox)
-                return p
+                        """))'''
+                return column(p)#,checkbox)
 
         def grafico1_2(self):
                 if(self.graf_opt1.value == 'Renda per Capita'):
@@ -69,7 +68,7 @@ class Aba_socioeco:
                                 linha_extra = {'legenda':'Outros','value':data.value[5:].sum()}
                                 data_aux =  data_aux.append(linha_extra, ignore_index = True)
                                 data = data_aux 
-                        p = figure(x_range = data.legenda, title = 'Renda per capita dos alunos desistentes',plot_width=500, plot_height=700, toolbar_location=None,tools="hover", tooltips="@legenda: @value")
+                        p = figure(x_range = data.legenda, title = 'Renda per capita dos alunos desistentes',plot_width=500, plot_height=600, toolbar_location=None,tools="hover", tooltips="@legenda: @value")
                              
 
                 elif(self.graf_opt1.value == 'Auxílio'):
@@ -81,7 +80,7 @@ class Aba_socioeco:
                                 linha_extra = {'legenda':'Outros','value':data.value[5:].sum()}
                                 data_aux =  data_aux.append(linha_extra, ignore_index = True)
                                 data = data_aux 
-                        p = figure(x_range = data.legenda,title = 'Situação de auxílio dos alunos desistentes',plot_width=500, plot_height=700, toolbar_location=None,tools="hover", tooltips="@legenda: @value")
+                        p = figure(x_range = data.legenda,title = 'Situação de auxílio dos alunos desistentes',plot_width=500, plot_height=600, toolbar_location=None,tools="hover", tooltips="@legenda: @value")
                         
 
                 elif(self.graf_opt1.value == 'Situação Emprego'):
@@ -93,7 +92,7 @@ class Aba_socioeco:
                                 linha_extra = {'legenda':'Outros','value':data.value[5:].sum()}
                                 data_aux =  data_aux.append(linha_extra, ignore_index = True)
                                 data = data_aux 
-                        p = figure(x_range = data.legenda,title = 'Situação de emprego dos alunos desistentes',plot_width=500, plot_height=700, toolbar_location=None,tools="hover", tooltips="@legenda: @value")
+                        p = figure(x_range = data.legenda,title = 'Situação de emprego dos alunos desistentes',plot_width=500, plot_height=600, toolbar_location=None,tools="hover", tooltips="@legenda: @value")
                         
 
                 elif(self.graf_opt1.value == 'Situação Moradia'):
@@ -105,7 +104,7 @@ class Aba_socioeco:
                                 linha_extra = {'legenda':'Outros','value':data.value[5:].sum()}
                                 data_aux =  data_aux.append(linha_extra, ignore_index = True)
                                 data = data_aux 
-                        p = figure(x_range = data.legenda,title = 'Situação de moradia dos alunos desistentes',plot_width=500, plot_height=700, toolbar_location=None,tools="hover", tooltips="@legenda: @value")
+                        p = figure(x_range = data.legenda,title = 'Situação de moradia dos alunos desistentes',plot_width=500, plot_height=600, toolbar_location=None,tools="hover", tooltips="@legenda: @value")
                 
                 p.yaxis.axis_label ="Alunos"   
                 p.vbar(top = 'value', x='legenda', bottom = 0, width=0.5, fill_color="steelblue", source =  data)
@@ -146,12 +145,12 @@ class Aba_socioeco:
                 p.x_range.end = 6
                 p.y_range.end = 4.5
                 p.axis.visible = False
-                LABELS = data.legenda.to_list()
+                '''LABELS = data.legenda.to_list()
                 checkbox = CheckboxGroup(labels=LABELS, active=[0, 1])
                 checkbox.js_on_click(CustomJS(code="""
                         console.log('checkbox_group: active=' + this.active, this.toString())
-                        """))
-                return column(p,checkbox)
+                        """))'''
+                return column(p)#,checkbox)
                         
                 
         def grafico2_2(self):
@@ -164,7 +163,7 @@ class Aba_socioeco:
                                 linha_extra = {'legenda':'Outros','value':data.value[5:].sum()}
                                 data_aux =  data_aux.append(linha_extra, ignore_index = True)
                                 data = data_aux  
-                        p = figure(x_range = data.legenda, title = 'UF_NATURALIDADE',plot_width=500, plot_height=700, tools="hover", tooltips="@legenda: @value")
+                        p = figure(x_range = data.legenda, title = 'UF_NATURALIDADE',plot_width=500, plot_height=600, tools="hover", tooltips="@legenda: @value")
                          
                                            
                 elif(self.graf_opt2.value == 'Nacionalidade'):
@@ -176,7 +175,7 @@ class Aba_socioeco:
                                 linha_extra = {'legenda':'Outros','value':data.value[5:].sum()}
                                 data_aux =  data_aux.append(linha_extra, ignore_index = True)
                                 data = data_aux
-                        p = figure(x_range = data.legenda, title = 'NACIONALIADE',plot_width=500, plot_height=700, tools="hover", tooltips="@legenda: @value")
+                        p = figure(x_range = data.legenda, title = 'NACIONALIADE',plot_width=500, plot_height=600, tools="hover", tooltips="@legenda: @value")
                                            
                 else:
                         legenda = self.data['NATURALIDADE'].unique()
@@ -187,7 +186,7 @@ class Aba_socioeco:
                                 linha_extra = {'legenda':'Outros','value':data.value[5:].sum()}
                                 data_aux =  data_aux.append(linha_extra, ignore_index = True)
                                 data = data_aux 
-                        p = figure(x_range = data.legenda, title = 'NATURALIDADE',plot_width=500, plot_height=700, tools="hover", tooltips="@legenda: @value")
+                        p = figure(x_range = data.legenda, title = 'NATURALIDADE',plot_width=500, plot_height=600, tools="hover", tooltips="@legenda: @value")
                                
                 
                 
@@ -235,12 +234,12 @@ class Aba_socioeco:
                 p.y_range.end = 4.5
                 p.legend.location = "top_right"
                 p.axis.visible = False
-                LABELS = data.legenda.to_list()
+                '''LABELS = data.legenda.to_list()
                 checkbox = CheckboxGroup(labels=LABELS, active=[0, 1])
                 checkbox.js_on_click(CustomJS(code="""
                         console.log('checkbox_group: active=' + this.active, this.toString())
-                        """))
-                return column(p,checkbox)
+                        """))'''
+                return column(p)#,checkbox)
 
         def grafico3_2(self):
                 if(self.graf_opt3.value == 'Plano de Estudo'):
@@ -252,7 +251,7 @@ class Aba_socioeco:
                                 linha_extra = {'legenda':'Outros','value':data.value[5:].sum()}
                                 data_aux =  data_aux.append(linha_extra, ignore_index = True)
                                 data = data_aux 
-                        p = figure(x_range = data.legenda,title = 'Situação de plano de estudo dos alunos desistentes',plot_width=500, plot_height=700, toolbar_location=None,tools="hover", tooltips="@legenda: @value")
+                        p = figure(x_range = data.legenda,title = 'Situação de plano de estudo dos alunos desistentes',plot_width=500, plot_height=600, toolbar_location=None,tools="hover", tooltips="@legenda: @value")
                         
 
                 elif(self.graf_opt3.value == 'Cotista'):
@@ -264,7 +263,7 @@ class Aba_socioeco:
                                 linha_extra = {'legenda':'Outros','value':data.value[5:].sum()}
                                 data_aux =  data_aux.append(linha_extra, ignore_index = True)
                                 data = data_aux 
-                        p = figure(x_range = data.legenda,title = 'Situação do tipo de cota dos alunos desistentes',plot_width=500, plot_height=700, toolbar_location=None,tools="hover", tooltips="@legenda:  @value")
+                        p = figure(x_range = data.legenda,title = 'Situação do tipo de cota dos alunos desistentes',plot_width=500, plot_height=600, toolbar_location=None,tools="hover", tooltips="@legenda:  @value")
                 
                 elif(self.graf_opt3.value == 'Tipo de Instituição de 2ø Grau'):
                         legenda = self.data["TIPO_INSTUICAO_SEGUNDO_GRAU"].unique()
@@ -275,7 +274,7 @@ class Aba_socioeco:
                                 linha_extra = {'legenda':'Outros','value':data.value[5:].sum()}
                                 data_aux =  data_aux.append(linha_extra, ignore_index = True)
                                 data = data_aux 
-                        p = figure(x_range = data.legenda,title = 'Tipo de instituição de 2ø grau cursada pelos alunos desistentes',plot_width=500, plot_height=700, toolbar_location=None,tools="hover", tooltips="@legenda:  @value")
+                        p = figure(x_range = data.legenda,title = 'Tipo de instituição de 2ø grau cursada pelos alunos desistentes',plot_width=500, plot_height=600, toolbar_location=None,tools="hover", tooltips="@legenda:  @value")
                 
                 elif(self.graf_opt3.value == 'Forma de Ingresso'):
                         legenda = self.data["FORMA_INGRESSO"].unique()
@@ -286,7 +285,7 @@ class Aba_socioeco:
                                 linha_extra = {'legenda':'Outros','value':data.value[5:].sum()}
                                 data_aux =  data_aux.append(linha_extra, ignore_index = True)
                                 data = data_aux 
-                        p = figure(x_range = data.legenda,title = 'Forma de ingresso dos alunos desistentes',plot_width=500, plot_height=700, toolbar_location=None,tools="hover", tooltips="@legenda:  @value")
+                        p = figure(x_range = data.legenda,title = 'Forma de ingresso dos alunos desistentes',plot_width=500, plot_height=600, toolbar_location=None,tools="hover", tooltips="@legenda:  @value")
 
                 else:  
                         p = figure(plot_width=400, plot_height=400) 

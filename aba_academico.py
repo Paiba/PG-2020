@@ -8,7 +8,6 @@ from bokeh.plotting import figure, output_file, show
 from bokeh.io import curdoc, output_file, show
 from bokeh.models import ColumnDataSource, Grid, HBar, LinearAxis, Plot, HoverTool,BoxSelectTool, Panel, Tabs, Select
 from bokeh.layouts import layout, column, row, Spacer
-from bokeh.palettes import Paired12
 from bokeh.transform import factor_cmap
 from bokeh.transform import cumsum
 from math import pi
@@ -17,37 +16,41 @@ class Aba_academico:
 
         #Quantidade de alunos evadidos absoluta por reprovações por falta
         def grafico1(self):
-                if(self.curso_rep.value=="Todos"):
-                        part_titulo =""
+                part_titulo =" "
+                if(self.curso_rep.value=="Todos"):                        
                         if(self.tipo_rep.value == 'Por Frequência'):
-                                hist_rep, edges_rep = np.histogram(self.data['NUM_REP_FALTA'], density=False, bins=200)
+                                reps = self.data['NUM_REP_FALTA']
+                                reps = reps.value_counts().sort_index()
                                 situacao = " por FREQUÊNCIA "
+                                
                         elif(self.tipo_rep.value == 'Por Nota'):               
-                                hist_rep, edges_rep = np.histogram(self.data['NUM_REP_NOTA'], density=False, bins=200)
+                                reps = self.data['NUM_REP_NOTA']
+                                reps = reps.value_counts().sort_index()
                                 situacao = " por NOTA "
                         else:
-                                hist_rep, edges_rep = np.histogram(self.data['NUM_REP_FALTA']+self.data['NUM_REP_NOTA'], density=False, bins=200)
-                                situacao =  " TOTAIS "
-                        fonte = {'right' : edges_rep[1:],
-                                 'left' : edges_rep[:-1],
-                                 'y' : hist_rep      }
+                                reps = self.data['NUM_REP_NOTA']+self.data['NUM_REP_FALTA']
+                                reps = reps.value_counts().sort_index()
+                                situacao =  " TOTAIS " 
                 else:
                         data = self.data.loc[self.data['NOME_CURSO']==self.curso_rep.value]
                         part_titulo =" ("+self.curso_rep.value+")"
                         if(self.tipo_rep.value == 'Por Frequência'):
-                                hist_rep, edges_rep = np.histogram(data['NUM_REP_FALTA'], density=False, bins=200)
+                                reps = data['NUM_REP_FALTA']
+                                reps = reps.value_counts().sort_index()
                                 situacao = " por FREQUÊNCIA "
                         elif(self.tipo_rep.value == 'Por Nota'):               
-                                hist_rep, edges_rep = np.histogram(data['NUM_REP_NOTA'], density=False, bins=200)
+                                reps = data['NUM_REP_NOTA']
+                                reps = reps.value_counts().sort_index()
                                 situacao = " por NOTA "
                         else:
-                                hist_rep, edges_rep = np.histogram(data['NUM_REP_FALTA']+data['NUM_REP_NOTA'], density=False, bins=200)
-                                situacao =  " TOTAIS "
-                        fonte = {'right' : edges_rep[1:],
-                                 'left' : edges_rep[:-1],
-                                 'y' : hist_rep      }              
-                reprovacoes = figure( plot_width=1400, plot_height=350,title= "Reprovações"+ situacao +"entre Alunos Desistentes"+part_titulo,tooltips=[("Reprovações","@left{int}"),("Alunos","@y")])
-                reprovacoes.quad(top='y', bottom=0, left='left', right='right',source =fonte, line_color="white")
+                                reps = data['NUM_REP_NOTA']+self.data['NUM_REP_FALTA']
+                                reps = reps.value_counts().sort_index()
+                                situacao =  " TOTAIS " 
+                fonte={'y': reps,
+                        'x':reps.reset_index()['index'] }
+                
+                reprovacoes = figure( plot_width=1400, plot_height=350,title= "Reprovações"+ situacao +"entre Alunos Desistentes"+part_titulo,tooltips=[("Reprovações","@x"),("Alunos","@y")])
+                reprovacoes.vbar(x='x',top='y',width=0.8,source=fonte)
                 reprovacoes.xaxis.axis_label = "Número de Reprovações"
                 reprovacoes.yaxis.axis_label = "Quantidade de Alunos"
                 return reprovacoes
@@ -135,23 +138,26 @@ class Aba_academico:
                 def update1(attr, old, new):
                         linha1.children[0:2] = [self.grafico3(),self.grafico2()]
                         reprovacoes.children[0] = self.grafico1()
+                
+                def update2(attr,old,new):
+                        reprovacoes.children[0] = self.grafico1()
+                
+                def update3(attr, old, new):
+                        linha1.children[0:2] = [self.grafico3(),self.grafico2()]
 
                 nome_cursos =  self.data['NOME_CURSO'].unique()
                 nome_cursos = np.append(nome_cursos, "Todos")     
                         
                 self.tipo_rep = Select(title = "Tipo de Reprovações",options=["Todos","Por Nota", "Por Frequência"], value="Todos")
-                self.tipo_rep.on_change('value', update1)                
+                self.tipo_rep.on_change('value', update2)                
 
                 self.curso_rep = Select(title = "Curso",options= nome_cursos.tolist(), value="Todos")
                 self.curso_rep.on_change('value', update1)
 
                 self.tipo_exib = Select(title= "Exibição",options=["Porcentagem", "Absoluto"], value="Absoluto")
-                self.tipo_exib.on_change('value', update1)
+                self.tipo_exib.on_change('value', update3)
 
-                reprovacoes = row(self.grafico1())
+                reprovacoes = column(self.grafico1(),self.tipo_rep)
                 linha1 = row(self.grafico3(),self.grafico2())
 
-                self.aba = layout([self.tipo_exib, self.curso_rep],[linha1],[[reprovacoes,self.tipo_rep]] )
-
-            
-                
+                self.aba = layout([self.tipo_exib, self.curso_rep],[linha1],[[reprovacoes]] )

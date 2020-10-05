@@ -110,6 +110,7 @@ class Aba_socioeco:
                 p.vbar(top = 'value', x='legenda', bottom = 0, width=0.5, fill_color="steelblue", source =  data)
                 p.yaxis.axis_label ="Alunos"
                 p.xaxis.axis_label =self.graf_opt1.value
+                p.xaxis.major_label_orientation = pi/3
                 return p
                 
         ################################################################################################################################################
@@ -193,6 +194,7 @@ class Aba_socioeco:
                 p.vbar(top = 'value', x='legenda', bottom = 0, width=0.5, fill_color="steelblue", source =  data)
                 p.yaxis.axis_label ="Alunos"
                 p.xaxis.axis_label =self.graf_opt2.value
+                p.xaxis.major_label_orientation = pi/3
                 return p
                 
         ################################################################################################################################################
@@ -294,6 +296,7 @@ class Aba_socioeco:
                 p.vbar(top = 'value', x='legenda', bottom = 0, width=0.5, fill_color="steelblue", source =  data)
                 p.yaxis.axis_label ="Alunos"
                 p.xaxis.axis_label =self.graf_opt1.value
+                p.xaxis.major_label_orientation = pi/3
                 return p
 
         ################################################################################################################################################

@@ -84,7 +84,7 @@ class Aba_academico:
                          'faixa':faixa,
                          'alunos':cr      }
 
-                rendimento = figure(plot_width=700, plot_height=350,title= titulo,toolbar_location=None)
+                rendimento = figure(plot_width=850, plot_height=350,title= titulo,toolbar_location=None)
                 circle_renderer = rendimento.circle(x='x',y='alunos',size=10, color="navy", alpha=0.5, source= fonte)
                 rendimento.line(x,cr,line_width=2)
                 rendimento.add_tools(HoverTool(tooltips=[("Alunos", exibir ),('Faixa do CR','@faixa')],mode = "mouse",renderers=[circle_renderer]))
@@ -121,11 +121,11 @@ class Aba_academico:
                 if(self.tipo_exib.value == "Porcentagem"):
                         fonte['value'] = (fonte['value']/fonte['value'].sum())*100
                         exibir = "@value{1.1}%"
-                freq_falta = figure(plot_width=700, plot_height=350, title=titulo, toolbar_location=None,tools="hover", tooltips=exibir)
+                freq_falta = figure(plot_width=850, plot_height=350, title=titulo, toolbar_location=None,tools="hover", tooltips=exibir)
                 freq_falta.wedge(x=2, y=1.5, radius=1, start_angle=cumsum('angle', include_zero=True), end_angle=cumsum('angle'),line_color="white", fill_color='color', legend='frequencia', source=fonte)
                 freq_falta.x_range.start = 0
                 freq_falta.y_range.start = 0
-                freq_falta.x_range.end = 5
+                freq_falta.x_range.end = 6
                 freq_falta.y_range.end = 3
                 freq_falta.legend.location = "top_right"
                 freq_falta.axis.visible = False
@@ -136,29 +136,29 @@ class Aba_academico:
         def __init__(self, dados):
                 self.data =  dados[dados.FORMA_EVASAO == 'Insucesso acadêmico'].reset_index()
 
-                def update1(attr, old, new):
-                        linha1.children[0:2] = [self.grafico3(),self.grafico2()]
+                def update1(attr,old,new):
                         reprovacoes.children[0] = self.grafico1()
                 
-                def update2(attr,old,new):
-                        reprovacoes.children[0] = self.grafico1()
-                
-                def update3(attr, old, new):
+                def update2(attr, old, new):
                         linha1.children[0:2] = [self.grafico3(),self.grafico2()]
 
                 nome_cursos =  self.data['NOME_CURSO'].unique()
                 nome_cursos = np.append(nome_cursos, "Todos")     
-                        
-                self.tipo_rep = Select(title = "Tipo de Reprovações",options=["Todos","Por Nota", "Por Frequência"], value="Todos")
-                self.tipo_rep.on_change('value', update2)                
+
 
                 self.curso_rep = Select(title = "Curso",options= nome_cursos.tolist(), value="Todos")
-                self.curso_rep.on_change('value', update1)
+                self.curso_rep.on_change('value', update1) 
+
+                self.tipo_rep = Select(title = "Tipo de Reprovações",options=["Todos","Por Nota", "Por Frequência"], value="Todos")
+                self.tipo_rep.on_change('value', update1)            
 
                 self.tipo_exib = Select(title= "Exibição",options=["Porcentagem", "Absoluto"], value="Absoluto")
-                self.tipo_exib.on_change('value', update3)
+                self.tipo_exib.on_change('value', update2)
 
-                reprovacoes = column(self.grafico1(),self.tipo_rep)
+                self.curso_rep2 = Select(title = "Curso",options= nome_cursos.tolist(), value="Todos")
+                self.curso_rep2.on_change('value', update2)
+
+                reprovacoes = column(self.grafico1(),row(self.tipo_rep,self.curso_rep))
                 linha1 = row(self.grafico3(),self.grafico2())
 
-                self.aba = layout([self.tipo_exib, self.curso_rep],[linha1],[[reprovacoes]] )
+                self.aba = layout([self.tipo_exib, self.curso_rep2],[linha1],[[reprovacoes]] )

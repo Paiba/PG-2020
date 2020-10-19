@@ -40,7 +40,7 @@ class Aba_disciplina:
                 indice_opcao = Select(value = 'Maior Índice de Reprovações',options = ['Maior Índice de Reprovações', 'Menor Índice de Reprovações'])
                 indice_opcao.on_change('value', update)
 
-                top_slider = Slider(start=5, end=20, value=5, step=1, title="")
+                top_slider = Slider(start=5, end=20, value=5, step=1, title="Número de Disciplinas Visível")
                 top_slider.on_change('value', update)
 
                 #Sub dataframe com quantidade de reprovados

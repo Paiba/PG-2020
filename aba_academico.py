@@ -6,7 +6,7 @@ import numpy as np
 
 from bokeh.plotting import figure, output_file, show
 from bokeh.io import curdoc, output_file, show
-from bokeh.models import ColumnDataSource, Grid, HBar, LinearAxis, Plot, HoverTool,BoxSelectTool, Panel, Tabs, Select
+from bokeh.models import ColumnDataSource, Grid, HBar, LinearAxis, Plot, HoverTool,BoxSelectTool, Panel, Tabs, Select, SingleIntervalTicker, LinearAxis
 from bokeh.layouts import layout, column, row, Spacer
 from bokeh.transform import factor_cmap
 from bokeh.transform import cumsum
@@ -48,9 +48,10 @@ class Aba_academico:
                                 situacao =  " TOTAIS " 
                 fonte={'y': reps,
                         'x':reps.reset_index()['index'] }
-                
-                reprovacoes = figure( plot_width=1400, plot_height=350,title= "Reprovações"+ situacao +"entre Alunos Desistentes"+part_titulo,tooltips=[("Reprovações","@x"),("Alunos","@y")])
+                reprovacoes = figure( plot_width=1700, plot_height=350,title= "Reprovações"+ situacao +"entre Alunos Desistentes"+part_titulo,tooltips=[("Reprovações","@x"),("Alunos","@y")])
                 reprovacoes.vbar(x='x',top='y',width=0.8,source=fonte)
+                reprovacoes.x_range.start = -0.5
+                reprovacoes.xaxis.ticker = reps.reset_index()['index']
                 reprovacoes.xaxis.axis_label = "Número de Reprovações"
                 reprovacoes.yaxis.axis_label = "Quantidade de Alunos"
                 return reprovacoes

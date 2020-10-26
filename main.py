@@ -148,7 +148,7 @@ def Main():
         SOCIOECO = Panel(child = SOCIOECO.aba, title ="Situação Socioeconômica")
         
         INEP = Aba_inep(tabela_inep)
-        INEP = Panel(child = INEP.aba, title = "INEP")
+        INEP = Panel(child = INEP.aba, title = "Taxa de Desistência Acumulada (INEP)")
 
         SITUACAO = Aba_geral(tabela_simplifica_aluno)
         SITUACAO = Panel(child = SITUACAO.aba, title = "Situação dos Alunos da UFES")

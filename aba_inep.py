@@ -72,6 +72,7 @@ class Aba_inep:
                         LegendItem(label="Média da UFES", renderers=[renderer_media3], index=4)
                         ])                       
                 p.add_layout(legend)
+                p.x_axis_location="above"
                 return p
 
          def __init__(self, inep):

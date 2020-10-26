@@ -63,6 +63,7 @@ class Aba_inep:
                 p.x_range.end = 120
                 p.xaxis.axis_label = "Taxa de desistência acumulada (%)"
                 p.yaxis.axis_label = "Cursos"
+                #p.xaxis.x_axis_location = "above"
                 p.yaxis.group_label_orientation = "horizontal"
                 legend = Legend(items=[
                         LegendItem(label="BRASIL", renderers=[renderer], index=0),
@@ -72,7 +73,7 @@ class Aba_inep:
                         LegendItem(label="Média da UFES", renderers=[renderer_media3], index=4)
                         ])                       
                 p.add_layout(legend)
-                p.x_axis_location="above"
+                
                 return p
 
          def __init__(self, inep):

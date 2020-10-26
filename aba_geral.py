@@ -66,6 +66,7 @@ class Aba_geral:
                         p=figure(plot_width=1000, plot_height=400, title = "Situação dos alunos",toolbar_location=None)
                 p.yaxis.axis_label = "Situação do Aluno"
                 p.xaxis.axis_label = "Quantidade de Alunos"
+                p.x_range.start = 0
                 return p
 
         def grafico2(self):
@@ -92,6 +93,7 @@ class Aba_geral:
                         p=figure(plot_width=1000, plot_height=400, title = "bla", toolbar_location=None)
                 p.yaxis.axis_label = "Curso"
                 p.xaxis.axis_label = "Quantidade de Alunos"
+                p.x_range.start = 0
                 return p
 
         

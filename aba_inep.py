@@ -46,7 +46,7 @@ class Aba_inep:
                 source = ColumnDataSource(data=dict(x=x, counts=counts))
 
 
-                p = figure(y_range=FactorRange(*x), plot_width=1700, plot_height=2000, title='Taxa de Desistência Acumulada: Turmas ingressantes em 2010', toolbar_location=None, tools="")
+                p = figure(y_range=FactorRange(*x), plot_width=1700, plot_height=2000,x_axis_location="above" , title='Taxa de Desistência Acumulada: Turmas ingressantes em 2010', toolbar_location=None, tools="")
                 renderer = p.hbar(y='x', right='counts',height=1, source=source, line_color="white",
                 fill_color=factor_cmap('x', palette=["lightblue","pink"], factors=medias, start=1, end=2))
                 p.add_tools(HoverTool(tooltips=[("Taxa de Desistência Acumulada","@counts{1.1}%"),("Nome do Curso, Local","@x")],mode = "mouse",renderers=[renderer]))
@@ -57,13 +57,12 @@ class Aba_inep:
                 renderer_media2= p.line(x=slope_es, y=data_ufes['NO_CURSO'],line_color='red', line_width =2)                
                 p.add_tools(HoverTool(tooltips = [("Média Taxa de desistência acumulada (ES)",'@y{1.1}%')],mode='mouse', renderers=[renderer_media2]))
 
-                renderer_media3= p.line(x=slope_ufes, y=data_ufes['NO_CURSO'],line_color='orange', line_width =2)                
+                renderer_media3= p.line(x=slope_ufes, y=data_ufes['NO_CURSO'],line_color='orange', line_width =2)               
                 p.add_tools(HoverTool(tooltips = [("Média Taxa de desistência acumulada (UFES)",'@y{1.1}%')],mode='mouse', renderers=[renderer_media3]))
                 p.x_range.start = 0
-                p.x_range.end = 120
+                p.x_range.end = 100
                 p.xaxis.axis_label = "Taxa de desistência acumulada (%)"
                 p.yaxis.axis_label = "Cursos"
-                #p.xaxis.x_axis_location = "above"
                 p.yaxis.group_label_orientation = "horizontal"
                 legend = Legend(items=[
                         LegendItem(label="BRASIL", renderers=[renderer], index=0),
@@ -71,9 +70,10 @@ class Aba_inep:
                         LegendItem(label="Média Nacional", renderers=[renderer_media1], index=2),
                         LegendItem(label="Média ES", renderers=[renderer_media2], index=3),
                         LegendItem(label="Média da UFES", renderers=[renderer_media3], index=4)
-                        ])                       
-                p.add_layout(legend)
-                
+                        ],location=(0, 1800))                       
+                p.add_layout(legend, "right")
+                p.sizing_mode = 'scale_width'
+
                 return p
 
          def __init__(self, inep):

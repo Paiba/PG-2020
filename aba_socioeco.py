@@ -51,13 +51,8 @@ class Aba_socioeco:
                 p.y_range.end = 4.5
                 p.legend.location = "top_right"
                 p.axis.visible = False
-                '''LABELS = data.legenda.to_list()
-                checkbox = CheckboxGroup(labels=LABELS, active=[0, 1])
-                checkbox.js_on_click(CustomJS(code="""
-                        console.log('checkbox_group: active=' + this.active, this.toString())
-                        """))'''
-                return column(p)#,checkbox)
-
+                
+                return column(p)
         def grafico1_2(self):
                 if(self.graf_opt1.value == 'Renda per Capita'):
                         legenda = self.data['RENDA_PER_CAPITA_AUFERIDA_FAIXA'].unique()
@@ -146,12 +141,8 @@ class Aba_socioeco:
                 p.x_range.end = 6
                 p.y_range.end = 4.5
                 p.axis.visible = False
-                '''LABELS = data.legenda.to_list()
-                checkbox = CheckboxGroup(labels=LABELS, active=[0, 1])
-                checkbox.js_on_click(CustomJS(code="""
-                        console.log('checkbox_group: active=' + this.active, this.toString())
-                        """))'''
-                return column(p)#,checkbox)
+                
+                return column(p)
                         
                 
         def grafico2_2(self):
@@ -236,12 +227,8 @@ class Aba_socioeco:
                 p.y_range.end = 4.5
                 p.legend.location = "top_right"
                 p.axis.visible = False
-                '''LABELS = data.legenda.to_list()
-                checkbox = CheckboxGroup(labels=LABELS, active=[0, 1])
-                checkbox.js_on_click(CustomJS(code="""
-                        console.log('checkbox_group: active=' + this.active, this.toString())
-                        """))'''
-                return column(p)#,checkbox)
+                
+                return column(p)
 
         def grafico3_2(self):
                 if(self.graf_opt3.value == 'Plano de Estudo'):

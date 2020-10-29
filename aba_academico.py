@@ -6,7 +6,7 @@ import numpy as np
 
 from bokeh.plotting import figure, output_file, show
 from bokeh.io import curdoc, output_file, show
-from bokeh.models import ColumnDataSource, Grid, HBar, LinearAxis, Plot, HoverTool,BoxSelectTool, Panel, Tabs, Select, SingleIntervalTicker, LinearAxis
+from bokeh.models import ColumnDataSource, Grid, HBar, LinearAxis, Plot, HoverTool,BoxSelectTool, Panel, Tabs, Select, SingleIntervalTicker, LinearAxis, Band
 from bokeh.layouts import layout, column, row, Spacer
 from bokeh.transform import factor_cmap
 from bokeh.transform import cumsum
@@ -80,9 +80,9 @@ class Aba_academico:
                 if(self.tipo_exib.value == 'Porcentagem'):
                         cr = np.divide(cr, (total/100))
                         exibir = "@alunos{1.1}%"
-                fonte = {'x' : x,
+                fonte = ColumnDataSource(data={'x' : x,
                          'faixa':faixa,
-                         'alunos':cr      }
+                         'alunos':cr      })
 
                 rendimento = figure(plot_width=850, plot_height=350,title= titulo,toolbar_location=None)
                 circle_renderer = rendimento.circle(x='x',y='alunos',size=10, color="navy", alpha=0.5, source= fonte)
@@ -91,7 +91,11 @@ class Aba_academico:
                 rendimento.xaxis.ticker = x
                 rendimento.xaxis.major_label_overrides = {1: 'Menor que 5', 2: 'Entre 5 e 7', 3: 'Maior que 7'}
                 rendimento.y_range.start = 0
+                band = Band(base='x', upper='alunos', source=fonte, level='underlay',fill_alpha=0.2, fill_color='#3970FF')
+                rendimento.add_layout(band)
                 rendimento.y_range.end = max(cr)+max(cr)*0.1
+                rendimento.x_range.start = 0.98
+                rendimento.x_range.end = 3.02
                 rendimento.xaxis.axis_label = "Faixa de Coeficiente de Rendimento"
                 rendimento.yaxis.axis_label = "Quantidade de Alunos"
                 return rendimento

@@ -95,7 +95,7 @@ class Aba_academico:
                 rendimento.add_layout(band)
                 rendimento.y_range.end = max(cr)+max(cr)*0.1
                 rendimento.x_range.start = 0.98
-                rendimento.x_range.end = 3.02
+                rendimento.x_range.end = 3.1
                 rendimento.xaxis.axis_label = "Faixa de Coeficiente de Rendimento"
                 rendimento.yaxis.axis_label = "Quantidade de Alunos"
                 return rendimento

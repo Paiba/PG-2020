@@ -25,8 +25,6 @@ class Aba_inep:
                 data_ufes['MEDIA_TDA_BR'] = data_brasil['TDA']
                 data_es = self.inep.loc[self.inep['CO_UF'] == 32]
 
-                #for col in data_ufes.columns: 
-                #       print(col) 
 
                 slope = [self.inep['TDA'].mean()]*len(data_ufes['NO_CURSO']) #Média Total
                 slope_es = [data_es['TDA'].mean()]*len(data_ufes['NO_CURSO']) #Média ES
@@ -52,13 +50,13 @@ class Aba_inep:
                 p.add_tools(HoverTool(tooltips=[("Taxa de Desistência Acumulada","@counts{1.1}%"),("Nome do Curso, Local","@x")],mode = "mouse",renderers=[renderer]))
 
                 renderer_media1= p.line(x=slope, y=data_ufes['NO_CURSO'],line_color='black', line_width =2)                
-                p.add_tools(HoverTool(tooltips = [("Média Taxa de desistência acumulada (Brasil)",'@y{1.1}%')],mode='mouse', renderers=[renderer_media1]))
+                p.add_tools(HoverTool(tooltips = [("Média Taxa de desistência acumulada (Brasil)",'@x{1.1}%')],mode='mouse', renderers=[renderer_media1]))
 
                 renderer_media2= p.line(x=slope_es, y=data_ufes['NO_CURSO'],line_color='red', line_width =2)                
-                p.add_tools(HoverTool(tooltips = [("Média Taxa de desistência acumulada (ES)",'@y{1.1}%')],mode='mouse', renderers=[renderer_media2]))
+                p.add_tools(HoverTool(tooltips = [("Média Taxa de desistência acumulada (ES)",'@x{1.1}%')],mode='mouse', renderers=[renderer_media2]))
 
                 renderer_media3= p.line(x=slope_ufes, y=data_ufes['NO_CURSO'],line_color='orange', line_width =2)               
-                p.add_tools(HoverTool(tooltips = [("Média Taxa de desistência acumulada (UFES)",'@y{1.1}%')],mode='mouse', renderers=[renderer_media3]))
+                p.add_tools(HoverTool(tooltips = [("Média Taxa de desistência acumulada (UFES)",'@x{1.1}%')],mode='mouse', renderers=[renderer_media3]))
                 p.x_range.start = 0
                 p.x_range.end = 100
                 p.xaxis.axis_label = "Taxa de desistência acumulada (%)"

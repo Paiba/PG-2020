@@ -109,7 +109,6 @@ class Aba_geral:
                         situ2.children[0] = self.grafico2()
 
                 self.alunos_por_ano = dados.filter(['ANO_INGRESSO','FORMA_EVASAO','MEDIA_FINAL', 'NOME_CURSO', 'RENDA_PER_CAPITA_AUFERIDA_FAIXA','NATURALIDADE','COTISTA','TIPO_INSTUICAO_SEGUNDO_GRAU'])
-                self.alunos_por_ano = self.alunos_por_ano.fillna(0)
                 self.alunos_por_ano.ANO_INGRESSO = self.alunos_por_ano.ANO_INGRESSO.astype(str)
 
                 #Seleção de Ano de ingresso no gráfico 1

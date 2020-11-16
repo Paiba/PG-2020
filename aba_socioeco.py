@@ -155,7 +155,7 @@ class Aba_socioeco:
                                 linha_extra = {'legenda':'Outros','value':data.value[5:].sum()}
                                 data_aux =  data_aux.append(linha_extra, ignore_index = True)
                                 data = data_aux  
-                        p = figure(x_range = data.legenda, title = 'UF_NATURALIDADE',plot_width=500, plot_height=600, tools="hover", tooltips="@legenda: @value")
+                        p = figure(x_range = data.legenda, title = 'UF_NATURALIDADE',plot_width=500, plot_height=600,toolbar_location=None, tools="hover", tooltips="@legenda: @value")
                          
                                            
                 elif(self.graf_opt2.value == 'Nacionalidade'):
@@ -167,7 +167,7 @@ class Aba_socioeco:
                                 linha_extra = {'legenda':'Outros','value':data.value[5:].sum()}
                                 data_aux =  data_aux.append(linha_extra, ignore_index = True)
                                 data = data_aux
-                        p = figure(x_range = data.legenda, title = 'NACIONALIADE',plot_width=500, plot_height=600, tools="hover", tooltips="@legenda: @value")
+                        p = figure(x_range = data.legenda, title = 'NACIONALIADE',plot_width=500, plot_height=600, toolbar_location=None,tools="hover", tooltips="@legenda: @value")
                                            
                 else:
                         legenda = self.data['NATURALIDADE'].unique()
@@ -178,7 +178,7 @@ class Aba_socioeco:
                                 linha_extra = {'legenda':'Outros','value':data.value[5:].sum()}
                                 data_aux =  data_aux.append(linha_extra, ignore_index = True)
                                 data = data_aux 
-                        p = figure(x_range = data.legenda, title = 'NATURALIDADE',plot_width=500, plot_height=600, tools="hover", tooltips="@legenda: @value")
+                        p = figure(x_range = data.legenda, title = 'NATURALIDADE',plot_width=500, plot_height=600,toolbar_location=None, tools="hover", tooltips="@legenda: @value")
                                
                 
                 

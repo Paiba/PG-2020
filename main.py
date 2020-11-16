@@ -136,7 +136,7 @@ def Main():
         tabela_simplifica_aluno['FORMA_EVASAO'] = tabela_refinada_aluno['FORMA_EVASAO'].replace(nome_indefinido, 'Indefinido')
         tabela_simplifica_aluno = tabela_simplifica_aluno[tabela_simplifica_aluno.FORMA_EVASAO != 'Indefinido']
         #CONSTRUÇÃO DA TABELA DE DISCIPLINAS E CURSOS
-        tabela_refinada_disciplinas = tabela_bruta.filter(['NOME_CURSO','NOME_DISCIPLINA','MEDIA_FINAL','SITUACAO_DISCIPLINA','ANO_DISCIPLINA', 'SEMESTRE_DISCIPLINA'])
+        tabela_refinada_disciplinas = tabela_bruta.filter(['NOME_CURSO','NOME_DISCIPLINA','MEDIA_FINAL','SITUACAO_DISCIPLINA'])#,'ANO_DISCIPLINA', 'SEMESTRE_DISCIPLINA'])
         
         ################## SUBABAS ######################
         

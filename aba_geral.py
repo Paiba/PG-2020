@@ -26,10 +26,10 @@ class Aba_geral:
                        part_titulo = " (Ingressantes de "+ self.ano_ing_opcao.value+")"
                 #Curso
                 if(self.curso_opt.value == 'Todos'):
-                       titulo = "Situação dos alunos da UFES "+part_titulo
+                       titulo = "Situação dos alunos da Ufes "+part_titulo
                 else:
                        data = data.loc[data['NOME_CURSO'] == self.curso_opt.value]
-                       titulo = "Situação dos alunos da UFES do curso "+self.curso_opt.value+part_titulo
+                       titulo = "Situação dos alunos da Ufes do curso "+self.curso_opt.value+part_titulo
                 #Renda per Capita
                 if(self.renda_opt.value == 'Todos'):
                         pass
@@ -75,8 +75,8 @@ class Aba_geral:
                         data = self.alunos_por_ano[self.alunos_por_ano.FORMA_EVASAO == 'Insucesso acadêmico']
                 elif(self.situacao_opt.value == 'Formado'):
                         data = self.alunos_por_ano[self.alunos_por_ano.FORMA_EVASAO == 'Formado']
-                elif(self.situacao_opt.value == 'Sem evasão'):
-                        data = self.alunos_por_ano[self.alunos_por_ano.FORMA_EVASAO == 'Sem evasão']
+                elif(self.situacao_opt.value == 'Sem Evasão'):
+                        data = self.alunos_por_ano[self.alunos_por_ano.FORMA_EVASAO == 'Sem Evasão']
                 if not data.empty:
                         data = data['NOME_CURSO'].value_counts()
                         data = data.reset_index(name='value').rename(columns={'index':'legenda'})

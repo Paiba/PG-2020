@@ -30,17 +30,13 @@ from aba_inep import Aba_inep
 
 def Main():
 
-# Leitura bruta do arquivo CSV
-        
-
-        #Temporario, mudar para upar no painel
-        
+# Leitura bruta dos arquivos
+        ######UFES#########
         file_path = '../data1.csv'
         tabela = pd.read_csv(file_path)#,nrows=1000000)
         tabela_bruta = tabela
         enxuga = ['ID_CURSO_ALUNO', 'COD_DISCIPLINA', 'ANO_DISCIPLINA','SEMESTRE_DISCIPLINA']
         tabela_bruta = tabela_bruta.drop_duplicates(subset=enxuga)
-        #dropar todas as linhas com matrícula(ESCREVER NA MONOGRAFIA)
         tabela_bruta = tabela_bruta[tabela_bruta.SITUACAO_DISCIPLINA != 'Matrícula']
         tabela_bruta['RENDA_PER_CAPITA_AUFERIDA'] = tabela_bruta['RENDA_PER_CAPITA_AUFERIDA'].fillna(0)
         
@@ -50,9 +46,10 @@ def Main():
         tabela_bruta['RENDA_PER_CAPITA_AUFERIDA_FAIXA'] = tabela_bruta['RENDA_PER_CAPITA_AUFERIDA_FAIXA'].fillna('Não Informada')     
                
         tabela_bruta['RENDA_PER_CAPITA_AUFERIDA_FAIXA'] = tabela_bruta.RENDA_PER_CAPITA_AUFERIDA_FAIXA.astype(str)
-        #######################################################
         
         
+        
+        #######INEP##########       
         
         file_path2 = '../inep-ufes.xlsx'
         tabela_inep = pd.read_excel(file_path2, header=8)
@@ -148,10 +145,10 @@ def Main():
         SOCIOECO = Panel(child = SOCIOECO.aba, title ="Situação Socioeconômica")
         
         INEP = Aba_inep(tabela_inep)
-        INEP = Panel(child = INEP.aba, title = "Taxa de Desistência Acumulada (INEP)")
+        INEP = Panel(child = INEP.aba, title = "Taxa de Desistência Acumulada (Inep)")
 
         SITUACAO = Aba_geral(tabela_simplifica_aluno)
-        SITUACAO = Panel(child = SITUACAO.aba, title = "Situação dos Alunos da UFES")
+        SITUACAO = Panel(child = SITUACAO.aba, title = "Situação dos Alunos da Ufes")
         ########### Classe de cada aba ####################
         GERAL = Tabs(tabs = [SITUACAO, INEP])        
         DISCIPLINA = Aba_disciplina(tabela_refinada_disciplinas)

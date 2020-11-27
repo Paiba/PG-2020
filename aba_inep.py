@@ -56,7 +56,7 @@ class Aba_inep:
                 p.add_tools(HoverTool(tooltips = [("Média Taxa de desistência acumulada (ES)",'@x{1.1}%')],mode='mouse', renderers=[renderer_media2]))
 
                 renderer_media3= p.line(x=slope_ufes, y=data_ufes['NO_CURSO'],line_color='orange', line_width =2)               
-                p.add_tools(HoverTool(tooltips = [("Média Taxa de desistência acumulada (UFES)",'@x{1.1}%')],mode='mouse', renderers=[renderer_media3]))
+                p.add_tools(HoverTool(tooltips = [("Média Taxa de desistência acumulada (Ufes)",'@x{1.1}%')],mode='mouse', renderers=[renderer_media3]))
                 p.x_range.start = 0
                 p.x_range.end = 100
                 p.xaxis.axis_label = "Taxa de desistência acumulada (%)"
@@ -64,10 +64,10 @@ class Aba_inep:
                 p.yaxis.group_label_orientation = "horizontal"
                 legend = Legend(items=[
                         LegendItem(label="BRASIL", renderers=[renderer], index=0),
-                        LegendItem(label="UFES", renderers=[renderer], index=1),
+                        LegendItem(label="Ufes", renderers=[renderer], index=1),
                         LegendItem(label="Média Nacional", renderers=[renderer_media1], index=2),
                         LegendItem(label="Média ES", renderers=[renderer_media2], index=3),
-                        LegendItem(label="Média da UFES", renderers=[renderer_media3], index=4)
+                        LegendItem(label="Média da Ufes", renderers=[renderer_media3], index=4)
                         ],location=(0, 1800))                       
                 p.add_layout(legend, "right")
                 p.sizing_mode = 'scale_width'

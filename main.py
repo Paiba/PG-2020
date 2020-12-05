@@ -121,11 +121,11 @@ def Main():
         
         nome_evasao = ['Desistência','Desligamento: Resolução 68/2017-CEPE','Desligamento por Abandono',
         'Desligamento: Descumpriu Plano de Estudos','Reopção de curso','Transferido','Desligamento: 3 reprovações em 1 disciplina',
-        'Transferência Interna', 'Reopção de Curso','Jubilado', 'Desligamento por mandado judicial','Falecimento' ,'Matricula desativada', 
+        'Transferência Interna', 'Reopção de Curso','Jubilado', 'Desligamento por mandado judicial','Matricula desativada', 
         'Sansão Disciplinar','Cancelamento Convênio'] #Grupo de diferentes nomenclaturas de evasão
         nome_formado = ['Formado']
         nome_semevasao = ['Sem evasão','Adaptação Curricular']
-        nome_indefinido = ['Nulidade da matrícula - ato administrativo','Erro de cadastro','Não Informado', 'Conclusão de Aluno Especial']
+        nome_indefinido = ['Falecimento', 'Nulidade da matrícula - ato administrativo','Erro de cadastro','Não Informado', 'Conclusão de Aluno Especial']
 
         tabela_simplifica_aluno['FORMA_EVASAO'] = tabela_refinada_aluno['FORMA_EVASAO'].replace(nome_evasao, 'Insucesso acadêmico') #Mudando diversas nomenclaturas de evasão para evadiu
         tabela_simplifica_aluno['FORMA_EVASAO'] = tabela_refinada_aluno['FORMA_EVASAO'].replace(nome_formado, 'Formado')

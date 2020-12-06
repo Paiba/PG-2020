@@ -59,11 +59,11 @@ class Aba_academico:
         #Coeficiente de Rendimento dos alunos desistentes
         def grafico2(self):
                 titulo = "Coeficiente Rendimento dos Alunos Desistentes"
-                if(self.curso_rep.value=="Todos"):
+                if(self.curso_rep2.value=="Todos"):
                         data = self.data
                 else:
-                        data = self.data.loc[self.data['NOME_CURSO']==self.curso_rep.value]
-                        titulo = titulo+" ("+self.curso_rep.value+")"
+                        data = self.data.loc[self.data['NOME_CURSO']==self.curso_rep2.value]
+                        titulo = titulo+" ("+self.curso_rep2.value+")"
                 cr = [0,0,0]
                 x=[1,2,3]
                 faixa = ['Menor que 5', 'Entre 5 e 7','Maior que 7']
@@ -103,11 +103,11 @@ class Aba_academico:
         #Frequência de presença de alunos desistentes
         def grafico3(self):
                 titulo = "Frequência da Presença em Aula dos Alunos Desistentes"
-                if(self.curso_rep.value=="Todos"):
+                if(self.curso_rep2.value=="Todos"):
                         data = self.data
                 else:
-                        data = self.data.loc[self.data['NOME_CURSO']==self.curso_rep.value]
-                        titulo = titulo+" ("+self.curso_rep.value+")"
+                        data = self.data.loc[self.data['NOME_CURSO']==self.curso_rep2.value]
+                        titulo = titulo+" ("+self.curso_rep2.value+")"
                 freq = [0,0,0]
                 for i in data['PORCENTAGEM_FALTAS']:
                         if i<=10:
@@ -149,6 +149,8 @@ class Aba_academico:
                 nome_cursos =  self.data['NOME_CURSO'].unique()
                 nome_cursos = np.append(nome_cursos, "Todos")     
 
+                self.curso_rep2 = Select(title = "Curso",options= nome_cursos.tolist(), value="Todos")
+                self.curso_rep2.on_change('value', update2)
 
                 self.curso_rep = Select(title = "Curso",options= nome_cursos.tolist(), value="Todos")
                 self.curso_rep.on_change('value', update1) 
@@ -159,8 +161,7 @@ class Aba_academico:
                 self.tipo_exib = Select(title= "Exibição",options=["Porcentagem", "Absoluto"], value="Absoluto")
                 self.tipo_exib.on_change('value', update2)
 
-                self.curso_rep2 = Select(title = "Curso",options= nome_cursos.tolist(), value="Todos")
-                self.curso_rep2.on_change('value', update2)
+ 
 
                 reprovacoes = column(self.grafico1(),row(self.tipo_rep,self.curso_rep))
                 linha1 = row(self.grafico3(),self.grafico2())
